@@ -28,11 +28,10 @@ Aiub Sperotto, F.; Adamatti, D. F. **A Model for Agent Communication Based on Im
 
 ###Instalação
 1. Adicione como uma nova biblioteca o arquivo.
-2. É necessário criar uma pasta no projeto chamada "log4j" e incluir nela o arquivo log4j.properties que pode ser baixada aqui. Em seguida, no build path da aplicação ou nas configurações da pasta criada, faça o link do recurso log4j. Em Jason, por exemplo, no Eclipse, isto pode ser feito em Project > Properties > Java Build Path > Link Source...
+2. É necessário criar uma pasta no projeto chamada "log4j" e incluir nela o arquivo log4j.properties que pode ser [baixada aqui](https://www.dropbox.com/s/z1jienursw8sund/log4j.properties). Em seguida, no build path da aplicação ou nas configurações da pasta criada, faça o link do recurso log4j. Em Jason, por exemplo, no Eclipse, isto pode ser feito em Project > Properties > Java Build Path > Link Source...
 
 ###Usando ontComAgent
 - Instancie o objeto na forma seguinte e utilize seus métodos para retornar uma string com as informações pesquisadas:
 
 `Mediador med = new Mediador("Local/arquivo/ontlogia.owl",URIOntologia,"Local/mesnagemAgente.txt");`
 `System.out.println(med.buscaConhecimento());`
-
