@@ -2,8 +2,8 @@ package ontocomAgent.geral;
 
 import java.util.ArrayList;
 
-import ontoAgent.ontologia.MetodosSPARQL;
 import ontocomAgent.comunicacao.Comunicacao;
+import ontocomAgent.ontologia.MetodosSPARQL;
 
 
 public class Mediador {
