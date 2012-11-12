@@ -101,7 +101,6 @@ public class Mediador {
 			
 			ArrayList resultados = new ArrayList();
 			resultados = sparql.listResultados(consulta);
-			//System.out.println("Resultados consulta: "+resultados.size());
 			//System.out.println("Resultado: "+resultados.get(0).toString());
 			
 			if(resultados.size() > 0){ //se existir resultados da ontologia

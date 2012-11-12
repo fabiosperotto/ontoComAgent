@@ -16,8 +16,6 @@ public class Comunicacao {
 		this.tipoProtocolo = tipoComunicacao;
 	}
 	
-	
-	
 	/**
 	 * Função para retornar em um pequeno array com as palavras do conteúdo 
 	 * de uma mensagem dos agentes. Depende do tipo de comunicação, sendo 0 para KQML

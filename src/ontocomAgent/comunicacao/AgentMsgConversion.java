@@ -85,6 +85,7 @@ public class AgentMsgConversion {
 			}catch (IOException error) {
 				System.out.println("Block error 1rst try-catch: "+error.getMessage());
 			}
+		
 		return maxRows;
 	}
 	

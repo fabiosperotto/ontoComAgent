@@ -68,7 +68,6 @@ public class MetodosSPARQL {
 		this.prefixoConsulta = prefixoConsulta;
 	}
 
-
 	/**
      * <p>
      * Método que abre o arquivo da Ontologia e instancia a mesma em memória.

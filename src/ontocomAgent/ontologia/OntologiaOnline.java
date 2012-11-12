@@ -28,8 +28,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 public class OntologiaOnline extends MetodosSPARQL{
 
 	public OntologiaOnline(String ontologiaURL) {
-		super(ontologiaURL,ontologiaURL+"#");
-		
+		super(ontologiaURL,ontologiaURL+"#");		
 	    //http://tech.groups.yahoo.com/group/jena-dev/message/10129
 	    //http://www.vaniomeurer.com.br/2010/03/14/como-acessar-sites-url-com-java/
 	    //testar com: http://www.co-ode.org/ontologies/pizza/pizza.owl	    	        

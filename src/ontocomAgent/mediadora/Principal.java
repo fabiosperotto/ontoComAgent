@@ -22,6 +22,7 @@ public class Principal {
 		//System.out.println(met.hasResults(consulta));
 		//met.getConsultaSimples(consulta);
 		
+		
 		Mediador med = new Mediador(arquivo,ontologiaURI,"C:/Users/Usuario/workspace/TxtFiles/teste.txt");
 		System.out.println(med.buscaConhecimento());
 		
