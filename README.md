@@ -43,6 +43,6 @@ Aiub Sperotto, F.; Adamatti, D. F. **A Model for Agent Communication Based on Im
 1. Na seção de [Downloads](https://github.com/fabiosperotto/ontoComAgent/downloads), baixe a ultima versão da biblioteca ontComAgent_X.X.jar.
 2. Para instalar Jason como plugin no Eclipse, siga o [tutorial de instalação](http://jason.sourceforge.net/mini-tutorial/eclipse-plugin) mantido pelos autores do projeto.
 3. No diretório do projeto, crie uma pasta para inserir os arquivos necessários para se trabalhar com ontComAgent. Como exemplo, criamos uma pasta chamada"lib".
-4. Inclua nessa pasta o arquivo ontComAgent_X.X.jar. No Eclipse, em X , clique com botão direito na biblioteca ontComAgent selecione Build Path > Add to Build Path.
+4. Inclua nessa pasta o arquivo ontComAgent_X.X.jar. No Eclipse, em Jason Navigator (Package Explorer) , clique com botão direito na biblioteca ontComAgent selecione Build Path > Add to Build Path.
 5. No diretório "lib" crie uma pasta chamada "log4j" e inclua o arquivo [log4j.properties](https://www.dropbox.com/s/z1jienursw8sund/log4j.properties). No Eclipse, clque com botão direito no diretório "lib" > New > Folder, inclua novamente o nome "log4j" e em Advanced selecione Linked Folder e procure, no diretório do sistema onde encontra-se a pasta "log4j".
 6. Agora você pode utilizar as classes de ontComAgent. Por exemplo, clicando com botão direito em src/java > New > Internal Action é possível definir novas ações internas em Java para repassar informações aos agentes com ontComAgent.
