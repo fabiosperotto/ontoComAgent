@@ -48,4 +48,4 @@ Aiub Sperotto, F.; Adamatti, D. F. **A Model for Agent Communication Based on Im
 6. Agora você pode utilizar as classes de ontComAgent. Por exemplo, clicando com botão direito em src/java > New > Internal Action é possível definir novas ações internas em Java para repassar informações aos agentes com ontComAgent.
 
 ###Sobre Ontologia
-Discussões sobre ontologias, conceitos e tecnologias de manipulação de ontologias tais como Jena e SPARQL podem ser encontradas no blog [Bazar do Conhecimento](http://bazardoconhecimento.wordpress.com/), mas também respondo por e-mail se houver a necessidade.
+Discussões sobre ontologias, conceitos e tecnologias de manipulação de ontologias tais como Jena e SPARQL podem ser encontradas no blog [Bazar do Conhecimento](http://bazardoconhecimento.wordpress.com/).
