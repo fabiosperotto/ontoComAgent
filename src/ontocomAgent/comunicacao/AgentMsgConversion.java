@@ -13,16 +13,16 @@ import java.io.LineNumberReader;
  * Esta classe tem por objetivo ser uma ferramenta para converter mensagens em KQML 
  * oriundas de arquivos de texto (.txt) em arrays bidimensionais (<a href="https://www.dropbox.com/s/2uzmh7dkwv7wlbq/fipatool.rar" target=_blank>Clique para download</a>).
  * </p>
- * @author Fabio Aiub Sperotto<br />
- * 		<a href="http://about.me/fabiosperotto" target=_blank>About.me</a><br />
- * 		<a href="mailto:fabio.aiub@gmail.com">email</a><br />
- * (Copyright 2012 Fabio A. Sperotto)<br />
  * <p align="justify">Este programa é um software livre; você pode redistribui-lo e/ou modifica-lo dentro dos termos da Licença Pública Geral GNU como 
  * publicada pela Fundação do Software Livre (FSF); na versão 3 da Licença.
  * Este programa é distribuido na esperança que possa ser útil, mas SEM NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer 
  * MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU para maiores detalhes.
  * Você deve ter recebido <a href="lesser.txt" target=_blank>uma cópia da Licença Pública Geral GNU</a> junto com este programa, se não, escreva para a Fundação do Software 
  * Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA</p>
+ * <br/><br/>
+ * @author Fabio Aiub Sperotto<br/>
+ *		<a href="mailto:fabio.aiub@gmail.com">email</a>
+ * <br/>
  */
 public class AgentMsgConversion {
 	

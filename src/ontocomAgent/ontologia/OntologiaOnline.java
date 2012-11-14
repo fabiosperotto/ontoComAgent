@@ -20,18 +20,16 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
  * Recomenda-se sempre efetuar o download da ontologia e utilizar a mesma em arquivo salvo em algum diretório para utilizar somente 
  * a classe {@link MetodosSPARQL}
  * </b>
- * Classe constituída por pesquisas, necessita referências.
  * </p>
- * @author Fabio Aiub Sperotto
- *
+ * <br/><br/>
+ * @author Fabio Aiub Sperotto<br/>
+ *		<a href="mailto:fabio.aiub@gmail.com">email</a>
+ * <br/>
  */
 public class OntologiaOnline extends MetodosSPARQL{
 
 	public OntologiaOnline(String ontologiaURL) {
-		super(ontologiaURL,ontologiaURL+"#");		
-	    //http://tech.groups.yahoo.com/group/jena-dev/message/10129
-	    //http://www.vaniomeurer.com.br/2010/03/14/como-acessar-sites-url-com-java/
-	    //testar com: http://www.co-ode.org/ontologies/pizza/pizza.owl	    	        
+		super(ontologiaURL,ontologiaURL+"#");  	        
 	}
 	
 	/**

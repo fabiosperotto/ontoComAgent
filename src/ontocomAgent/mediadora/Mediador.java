@@ -5,6 +5,22 @@ import java.util.ArrayList;
 import ontocomAgent.comunicacao.Comunicacao;
 import ontocomAgent.ontologia.MetodosSPARQL;
 
+/**
+ * <p>
+ * Classe responsável em realizar a mediação da informação do agente. Ao conseguir manipular a informação que o agente está tratando, a mesma é bsucada na ontologia. 
+ * Em seguida é retornado a esta camada mediadora, para que possa retornar a informação ao agente.
+ * </p>
+* <p align="justify">Este programa é um software livre; você pode redistribui-lo e/ou modifica-lo dentro dos termos da Licença Pública Geral GNU como 
+* publicada pela Fundação do Software Livre (FSF); na versão 3 da Licença.
+* Este programa é distribuido na esperança que possa ser útil, mas SEM NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer 
+* MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU para maiores detalhes.
+* Você deve ter recebido <a href="lesser.txt" target=_blank>uma cópia da Licença Pública Geral GNU</a> junto com este programa, se não, escreva para a Fundação do Software 
+* Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA</p>
+* <br/><br/>
+* @author Fabio Aiub Sperotto<br/>
+*		<a href="mailto:fabio.aiub@gmail.com">email</a>
+* <br/>
+**/
 
 public class Mediador {
 	
@@ -41,6 +57,12 @@ public class Mediador {
 		this.mensagem = mensagem;
 	}
 
+	/**
+	 * Construtor da classe.
+	 * @param ontologia caminho da qual se encontra o arquivo .owl da ontologia.
+	 * @param ontologiaURI URI padrão da ontologia (Ex: "http://ontologias.com/nome_ontologia").
+	 * @param mensagemAgente caminho que se encontra a mensagem.txt do agente
+	 */
 	public Mediador(String ontologia, String ontologiaURI, String mensagemAgente){
 		this.localOntologia = ontologia;
 		this.ontologiaURI = ontologiaURI;
@@ -64,15 +86,7 @@ public class Mediador {
 			resultadoMsg += resultados.get(i);
 		}
 		//System.out.println("\nResultado:"+resultadoMsg);
-		return resultadoMsg.trim();
-		
-	
-		//fuzzySet = met.buscaSinonimosFuzzy("horti");
-		//if(fuzzySet != null){
-			//System.out.println("Maior: "+getMaiorSinonimo(fuzzySet));
-			
-		//}
-		//System.out.println("\nSinonimo para: "+met.getClasseSinonimo("horti"));
+		return resultadoMsg.trim();		
 		 
 	}
 	
@@ -136,7 +150,6 @@ public class Mediador {
 					//info = " "+conceitosConsulta[i]+" é "+colunasExtraidas[0].replaceAll("http.+#","")+
 							//" de "+colunasExtraidas[1].replaceAll("http.+#","")+"";
 					info = " "+colunasExtraidas[1].replaceAll("http.+#","");
-					//System.out.println(info);
 					resultadoFinal.add(info);
 				}				
 			}else{
@@ -166,5 +179,4 @@ public class Mediador {
 		}		
 		return sinonimo;
 	}
-
 }

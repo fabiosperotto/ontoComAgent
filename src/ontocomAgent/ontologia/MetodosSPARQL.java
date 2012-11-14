@@ -21,10 +21,6 @@ import java.util.Iterator;
  * dúvidas ocorram sobre alguns métodos utilizados aqui. Entretanto estou disponível para 
  * qualquer discussão.
  * </p>
- * @author Fabio Aiub Sperotto<br/>
- * 		<a href="http://about.me/fabiosperotto">About.me</a><br/>
- * 		<a href="mailto:fabio.aiub@gmail.com">email</a>
- * <br/><br/>
  * Referências usadas:<br/>
  * <a href="http://opentox.org/data/documents/development/RDF%20files/JavaOnly/query-reasoning-with-jena-and-sparql">
  * OpenTox - Querying/Reasoning with Jena and SPARQL</a><br/>
@@ -36,7 +32,20 @@ import java.util.Iterator;
  * Semantic Web.com - Fórum de dúvidas sobre variados códigos</a><br/>
  * <a href="http://stackoverflow.com/questions/4953938/how-to-retrieve-a-columns-value-in-sparql">
  * Stackoverflow - Outro bom fórum sobre variados códigos</a><br/>
- */
+ * <br/>
+ * /**
+* <p align="justify">Este programa é um software livre; você pode redistribui-lo e/ou modifica-lo dentro dos termos da Licença Pública Geral GNU como 
+* publicada pela Fundação do Software Livre (FSF); na versão 3 da Licença.
+* Este programa é distribuido na esperança que possa ser útil, mas SEM NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer 
+* MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU para maiores detalhes.
+* Você deve ter recebido <a href="lesser.txt" target=_blank>uma cópia da Licença Pública Geral GNU</a> junto com este programa, se não, escreva para a Fundação do Software 
+* Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA</p>
+* <br/><br/>
+* @author Fabio Aiub Sperotto<br/>
+*		<a href="mailto:fabio.aiub@gmail.com">email</a>
+* <br/>
+*/
+
 public class MetodosSPARQL {
 	
 	protected String arquivo;
@@ -424,12 +433,8 @@ public class MetodosSPARQL {
         		OntClass ontcls = this.modelo.getOntClass(indi.getOntClass(true).toString());
         		//System.out.println("Classe: "+ontcls.getLocalName());
         		concept = ontcls.getLocalName();
-    		}
-    		
-    		    		    		
-
-    	}
-    	
+    		}    		    		    		    
+    	}    	
     	return concept;
     }
     
@@ -440,21 +445,10 @@ public class MetodosSPARQL {
      */
     public String[][] buscaSinonimosFuzzy(String wordSynonyms){
     	
-    	String[][] fuzzySet = null;
-	
-		//MetodosSPARQL baseData = new MetodosSPARQL(arquivo,ontologia);
-        
-       // String wordSynonyms = "horti"; //palavra a ser procurada
+    	String[][] fuzzySet = null;	               
          String queryString = this.buscaSinonimos(wordSynonyms);
          if( queryString != null){
-                		
-                		
-              /*
-              queryString = "SELECT ?ind ?sinonimos WHERE {" +
-                             "?ind rdf:type <"+indi.getOntClass().toString()+">." +
-                             "?ind rdfs:comment ?sinonimos }\n";
-              //baseData.getConsultaSimples(queryString);
-              */
+                		                		              
               ArrayList<String> listaColunas = new ArrayList<String>();
               listaColunas.add("?ind");
               listaColunas.add("?sinonimo");
