@@ -15,7 +15,7 @@ public class Principal {
 	            + "hortas/onto_hortas/horta_urbana.owl";
 		String ontologiaURI = "http://www.owl-ontologies.com/horta_urbana_hsj.owl#";				
 		
-		Mediador med = new Mediador(arquivo,ontologiaURI,"C:/Users/Usuario/workspace/TxtFiles/teste.txt");
+		Mediador med = new Mediador(arquivo,ontologiaURI,"C:/Users/Usuario/workspace/TxtFiles/teste.txt",0);
 		System.out.println(med.buscaConhecimento());
 	}
 }

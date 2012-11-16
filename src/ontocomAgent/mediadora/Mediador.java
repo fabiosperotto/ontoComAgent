@@ -1,5 +1,6 @@
 package ontocomAgent.mediadora;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import ontocomAgent.comunicacao.Comunicacao;
@@ -27,7 +28,7 @@ public class Mediador {
 	private String localOntologia;
 	private String ontologiaURI;
 	private String mensagem;
-	public int tipoProtocolo;
+	public int tipoLingConteudo;
 
 	public Mediador() {
 
@@ -63,10 +64,11 @@ public class Mediador {
 	 * @param ontologiaURI URI padrão da ontologia (Ex: "http://ontologias.com/nome_ontologia").
 	 * @param mensagemAgente caminho que se encontra a mensagem.txt do agente
 	 */
-	public Mediador(String ontologia, String ontologiaURI, String mensagemAgente){
+	public Mediador(String ontologia, String ontologiaURI, String mensagemAgente, int codProtocolo){
 		this.localOntologia = ontologia;
 		this.ontologiaURI = ontologiaURI;
 		this.mensagem = mensagemAgente;
+		this.tipoLingConteudo = codProtocolo;
 		
 	}
 	
@@ -76,18 +78,27 @@ public class Mediador {
 	public String buscaConhecimento(){
 		
 		MetodosSPARQL met = new MetodosSPARQL(this.localOntologia, this.ontologiaURI);
-		Comunicacao commAgent = new Comunicacao();
+		Comunicacao commAgent = new Comunicacao(this.tipoLingConteudo);
 		String[] conceitosConsulta = commAgent.getContent(this.mensagem);
-		ArrayList<String> resultados = this.buscaInfoIndividuo(met, conceitosConsulta);
-		
 		String resultadoMsg = "";
-		int i;
-		for(i = 0; i<resultados.size(); i++){
-			resultadoMsg += resultados.get(i);
-		}
-		//System.out.println("\nResultado:"+resultadoMsg);
-		return resultadoMsg.trim();		
-		 
+		
+		if(conceitosConsulta != null){
+			
+			ArrayList<String> resultados = this.buscaInfoIndividuo(met, conceitosConsulta);			
+			
+			for(int i = 0; i<resultados.size(); i++){
+				resultadoMsg += resultados.get(i);
+			}
+			//System.out.println("\nResultado:"+resultadoMsg);
+			return resultadoMsg.trim();		
+			
+		}else{
+			System.out.println("Linguagem de conteúdo não compreendida. Favor verificar qual código " +
+					"inserido na instanciação do objeto da classe Mediador. " +
+					"\nO código informado "+this.tipoLingConteudo+" pode estar errado ou ontoComAgent não está preparado para lidar com esse " +
+					"tipo de linguagem de conteúdo.");
+			return null;
+		}			 
 	}
 	
 	/**
@@ -104,20 +115,23 @@ public class Mediador {
 		String colunas[] = {"?p", "?s", "?o"};
 		String resultado = null, info = null;
 		ArrayList<String> resultadoFinal = new ArrayList<String>();
+		//resultadoFinal = null;
 		String tagRDF;
 		
 		int i,j;
+		
 		for(i = 0; i<conceitosConsulta.length; i++){
 			
 			String consulta = "SELECT * WHERE{ " +
 					"?s ?p ?o. " +
-					"FILTER (regex(?o, '"+conceitosConsulta[i].replace('?', ' ').trim()+"', 'i'))}\n";
+					"FILTER (regex(?o, '"+conceitosConsulta[i].replaceAll("\\W", "").trim()+"', 'i'))}\n";
 			
 			ArrayList resultados = new ArrayList();
 			resultados = sparql.listResultados(consulta);
 			//System.out.println("Resultado: "+resultados.get(0).toString());
 			
 			if(resultados.size() > 0){ //se existir resultados da ontologia
+				
 				resultado = resultados.get(0).toString().replaceAll("[(-)]", "");		
 				resultado = resultado.replaceAll("\\<","");
 				resultado = resultado.replaceAll("\\>","");

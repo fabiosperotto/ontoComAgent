@@ -54,7 +54,7 @@ public class Comunicacao {
 					
 					if(msgArray[i][j].contains(":content")){					
 						conteudoMsg = msgArray[i][j+1];
-						System.out.println("Mensagem: "+conteudoMsg);
+						System.out.println("Mensagem do agente: "+conteudoMsg);
 					}										
 				}
 			}
