@@ -2,7 +2,7 @@
 
 
 ###Introdução
-Este projeto visa desenvolver um modelo de interoperabilidade na comunicação de agentes, utilizando Ontologia e Sinônimos. É uma biblioteca de programação para oferecer aos desenvolvedores de Sistemas Multiagentes uma opção na utilização de ontologias para apoiar a comunicação dos agentes de forma simples, sem a necessidade do conhecimento profundo sobre Ontologias e tecnologias de manipulação tais como SPARQL e [Jena](http://jena.apache.org/).
+Este projeto visa desenvolver um modelo de interoperabilidade na comunicação de agentes, utilizando Ontologia e Sinônimos. É uma biblioteca de programação para oferecer aos desenvolvedores de Sistemas Multiagentes uma opção na utilização de ontologias para apoiar a comunicação dos agentes de forma simples, sem a necessidade do conhecimento profundo sobre Ontologias e tecnologias de manipulação tais como SPARQL e [Jena](http://jena.apache.org/). Mais informações serão incluídas nesta página ou na Wiki (em construção).
 
 Este projeto tem como apoio a FAPERGS.
 
@@ -28,13 +28,14 @@ Aiub Sperotto, F.; Adamatti, D. F. **A Model for Agent Communication Based on Im
 
 ###Instalação
 1. Adicione como uma nova biblioteca o arquivo.
-2. Por imposição do Jena, pode ser obrigatório a configuração do [logging API log4j](http://logging.apache.org/log4j/), para utilização equilibrada de ontComAgent. É necessário criar uma pasta no projeto chamada "log4j" e incluir nela o arquivo log4j.properties que pode ser [baixada aqui](https://www.dropbox.com/s/z1jienursw8sund/log4j.properties). Em seguida, no build path da aplicação ou nas configurações da pasta criada, faça o link do recurso log4j. Em Jason, por exemplo, no Eclipse, isto pode ser feito em Project > Properties > Java Build Path > Link Source...
+2. Por imposição do Jena, pode ser obrigatório a configuração do [logging API log4j](http://logging.apache.org/log4j/), para utilização equilibrada de ontComAgent. Caso tenha problemas na compilação referente ao lo4j é necessário criar uma pasta no projeto chamada "log4j" e incluir nela o arquivo log4j.properties que pode ser [baixada aqui](https://www.dropbox.com/s/z1jienursw8sund/log4j.properties). Em seguida, no build path da aplicação ou nas configurações da pasta criada, faça o link do recurso log4j. Em Jason, por exemplo, no Eclipse, isto pode ser feito em Project > Properties > Java Build Path > Link Source...
 
 ###Usando ontComAgent
 - Instancie o objeto na forma seguinte e utilize seus métodos para retornar uma string com as informações pesquisadas:
 
-`Mediador med = new Mediador("Local/arquivo/ontlogia.owl",URIOntologia,"Local/mensagemAgente.txt");`
+`Mediador med = new Mediador("Local/arquivo/ontlogia.owl",URIOntologia,"Local/mensagemAgente.txt",0);`
 `System.out.println(med.buscaConhecimento());`
+
 
 ### Utilizando ontComAgent em Projetos
 
