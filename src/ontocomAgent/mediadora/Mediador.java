@@ -117,15 +117,18 @@ public class Mediador {
 		ArrayList<String> resultadoFinal = new ArrayList<String>();
 		//resultadoFinal = null;
 		String tagRDF;
+		String palavraPesquisa;
 		
 		int i,j;
 		
 		for(i = 0; i<conceitosConsulta.length; i++){
 			
+			palavraPesquisa = conceitosConsulta[i].replaceAll("\\W", "").trim();
+			
 			String consulta = "SELECT * WHERE{ " +
 					"?s ?p ?o. " +
-					"FILTER (regex(?o, '"+conceitosConsulta[i].replaceAll("\\W", "").trim()+"', 'i'))}\n";
-			
+					"FILTER (regex(?o, '"+palavraPesquisa+"', 'i'))}\n";
+
 			ArrayList resultados = new ArrayList();
 			resultados = sparql.listResultados(consulta);
 			//System.out.println("Resultado: "+resultados.get(0).toString());
@@ -152,7 +155,7 @@ public class Mediador {
 				if(tagRDF.compareTo("rdfs:comment") == 0){
 					//System.out.println("aqui");
 					//MetodosSPARQL test = new MetodosSPARQL(this.localOntologia, this.ontologiaURI);
-					String concept = sparql.getClasseSinonimo(conceitosConsulta[i].replace('?', ' ').trim());
+					String concept = sparql.getClasseSinonimo(palavraPesquisa);
 					//System.out.println("Concept: "+concept);
 					if(concept != null){
 						//info = ", "+conceitosConsulta[i].replace('?', ' ')+" é sinônimo de "+concept;
