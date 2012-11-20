@@ -33,7 +33,7 @@ Aiub Sperotto, F.; Adamatti, D. F. **A Model for Agent Communication Based on Im
 ###Usando ontComAgent
 - Instancie o objeto na forma seguinte e utilize seus métodos para retornar uma string com as informações pesquisadas:
 
-`Mediador med = new Mediador("Local/arquivo/ontlogia.owl",URIOntologia,"Local/mensagemAgente.txt",0);`
+`Mediador med = new Mediador("Local/arquivo/ontlogia.owl",URIOntologia,"Local/mensagemAgente.txt");`
 `System.out.println(med.buscaConhecimento());`
 
 
