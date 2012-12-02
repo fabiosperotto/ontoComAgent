@@ -10,7 +10,13 @@ public class Principal {
 		String ontologiaURI = "http://www.owl-ontologies.com/horta_urbana_hsj.owl#";				
 		
 		//Mediador med = new Mediador(arquivo,ontologiaURI,"C:/Users/Usuario/workspace/TxtFiles/teste.txt",1);
-		Mediator med = new Mediator(arquivo,ontologiaURI,"_zeh parcela horti ?maquinario",0);
-		System.out.println(med.getKnowledge());
+		//Mediator med = new Mediator(arquivo,ontologiaURI,"_zeh parcela horti ?maquinario",0);		
+		//System.out.println(med.getKnowledge());
+				
+		
+		//Mediator med = new Mediator(arquivo,ontologiaURI,"voluntario ?ajuda ?atende tecnico horti ong",0);
+		Mediator med = new Mediator(arquivo,ontologiaURI,"voluntario ?ajuda horti ong",0);
+		System.out.println(med.getKnowledgeRelation());
+		
 	}
 }

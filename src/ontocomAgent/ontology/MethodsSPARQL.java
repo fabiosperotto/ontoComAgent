@@ -3,6 +3,7 @@ package ontocomAgent.ontology;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
+import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.query.*;
 import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.util.FileManager;
@@ -115,7 +116,7 @@ public class MethodsSPARQL {
         // executando a consulta e retornando os resultados
         this.openOntology();
         this.executedQuery = QueryExecutionFactory.create(query, this.model);      
-        ResultSet results = this.executedQuery.execSelect();        
+        ResultSet results = this.executedQuery.execSelect(); 
         return results;        
     }
     
@@ -166,7 +167,7 @@ public class MethodsSPARQL {
      * Returns a list of results in an ArrayList.
      * </p>
      * @param queryString A string with any SPARQL query.
-     * @return Retorna an ArrayList containing a list with the query results.
+     * @return Returns an ArrayList containing a list with the query results.
      */
     @SuppressWarnings("rawtypes")
 	public ArrayList listResults(String queryString){
@@ -255,7 +256,7 @@ public class MethodsSPARQL {
         // tambem realiza a manipulacao em String dos resultados
         // para retornar em URI as propriedades, relacionamentos, classes
         
-        ResultSet resultsQuery = executeQuery( this.queryPrefix+queryString );
+        ResultSet resultsQuery = executeQuery( queryString );
         
         String doConversion, newString;
         Iterator<QuerySolution> results = resultsQuery;
@@ -549,14 +550,14 @@ public class MethodsSPARQL {
     	int maxCol = listColumns.size();    	  	    	
     	String[] listRowValues = new String[maxCol];    	
     	RDFNode nodo;
-    	Resource recurso;
+    	Resource resource;
     	String LexicalFormName = null;
     	int pos = 0;
     		
     	QuerySolution soln = resultados.nextSolution();
-		//System.out.println("Resultado SPARQL:\n"+soln+"\n");  
-    	//System.out.println("Coluna:\n"+resultados.getResultVars().get(0)+"\n");        	    
-    	//System.out.println("Individuo: "+soln.getResource((resultados.getResultVars().get(0))));
+		//System.out.println("SPARQL result:\n"+soln+"\n");  
+    	//System.out.println("Column:\n"+resultados.getResultVars().get(0)+"\n");        	    
+    	//System.out.println("Individual: "+soln.getResource((resultados.getResultVars().get(0))));
     	
     	for(int i=0;i<maxCol;i++){
     		
@@ -567,9 +568,9 @@ public class MethodsSPARQL {
     		if(nodo.isResource()){
     			
     			// node conversion in resource:
-        		recurso = (Resource)nodo;
-                //System.out.println("Elemento: "+recurso.getURI()+"\n");        		
-                listRowValues[pos] = recurso.getURI();
+    			resource = (Resource)nodo;
+                //System.out.println("Element: "+recurso.getURI()+"\n");        		
+                listRowValues[pos] = resource.getURI();
     		}
     		
     		if(nodo.isLiteral()){    			  		
@@ -592,4 +593,107 @@ public class MethodsSPARQL {
     	this.executedQuery.close();    	    
     	return listRowValues;	
     }
+    
+    /**
+     * Method to capitalize the first letter of a string.
+     * @param oldWord the old word to capitalize.
+     * @return new word with first letter capitalized.
+     */
+    public String getFirstUpperCase(String oldWord){
+    	
+    	String letter = oldWord.substring(0, 1).toUpperCase();
+    	return oldWord.replaceFirst(oldWord.substring(0, 1), letter);
+    	
+    }
+    
+    /**
+     * This method uses SPARQL conducting research in ontology about an object property 
+     * and to whom it relates. For example, inserting a URI to an object property and 
+     * informing on rdfTag "range", this method returns a list with the names of the 
+     * target resource (rdf: range) inserted property 
+     * @param propertyURI URI of a property.
+     * @param rdfTag a rdfs tag name like "range", "domain", etc.
+     * @return list with relations found.
+     */
+    public ArrayList<String> getObjectRelationProperty(String propertyURI, String rdfTag){
+    	
+    	ArrayList<String> relationList = new ArrayList<String>();
+    	
+    	String queryString = "SELECT ?"+rdfTag+" " +
+    							"WHERE { <"+propertyURI+"> rdfs:"+rdfTag+" ?"+rdfTag+" . " +
+    							"}";
+    	
+    	ResultSet resultsQuery = executeQuery( queryString );         
+        Iterator<QuerySolution> results = resultsQuery;
+        QuerySolution soln; //to retrieve better SPARQL columns, see the soln.get() below   
+        RDFNode nodo;
+        Resource resource; //providing a way to manipulate the RDFNode into ontology class, see below
+        
+         
+         for ( ; results.hasNext() ; ){
+             
+             soln = results.next();
+             nodo = soln.get("?"+rdfTag);
+             resource = (Resource)nodo;
+             //relationList.add(soln.getResource("?"+rdfTag).toString());
+             relationList.add(resource.getLocalName());
+            
+             //System.out.println("Find: "+soln.get("?range"));
+         }
+        this.executedQuery.close();
+    	return relationList;
+    }
+  
+    /**
+     * Search and returns an object property, considering the name of the property has the first capitalized letter or not.
+     * @param propertyName name of the property to search
+     * @param upperCase indicate 0 if the propertyName is certain equal in ontology. Indicate 1 if needs upper the firts letter of propertyName.
+     * @return URI of a true object property or null if the propertyName not exists in ontology.
+     */
+    public String getObjectProperty(String propertyName, int upperCase){
+    	
+    	String property = null;
+    	
+    	this.openOntology();
+    	if(upperCase == 0){
+    		property =  this.ontologyURI + propertyName;
+    	}
+    	
+    	if(upperCase == 1){
+    		property = this.ontologyURI + this.getFirstUpperCase(propertyName);    		
+    	}
+    	
+    	if(this.model.getObjectProperty(property) == null){
+    		 property = null;
+    	 }
+    	
+    	return property;
+    	
+    }
+    
+    /**
+     * <p>
+     * Research in ontology a set of words, which they are checking returning object properties.
+     * </p>
+     * @param wordsSearch a array with words to search.
+     * @return ArrayList with a list of object properties.
+     */
+    public ArrayList<String> getObjectPropertiesList(String[] wordsSearch){
+    	
+    	this.openOntology();
+    	String property;
+    	ArrayList<String> wordObjectRelations = new ArrayList<String>();
+    	 
+    	 for(int i = 0; i<wordsSearch.length; i++){
+    		 
+    		 property = this.ontologyURI+this.getFirstUpperCase(wordsSearch[i]);
+    		 if(this.model.getObjectProperty(property) != null){
+    			 
+    			 //System.out.println(property);
+    			 wordObjectRelations.add(property);
+    		 }    		 
+    	 }
+    	 return wordObjectRelations;    	     	     	
+    }
+    
 }
