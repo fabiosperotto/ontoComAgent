@@ -3,7 +3,6 @@ package ontocomAgent.ontology;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
-import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.query.*;
 import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.util.FileManager;
@@ -666,7 +665,7 @@ public class MethodsSPARQL {
     	if(this.model.getObjectProperty(property) == null){
     		 property = null;
     	 }
-    	
+  
     	return property;
     	
     }

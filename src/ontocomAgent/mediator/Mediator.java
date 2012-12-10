@@ -1,6 +1,5 @@
 package ontocomAgent.mediator;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import ontocomAgent.communication.Communication;
@@ -208,11 +207,11 @@ public class Mediator {
 	 */
 	public String getKnowledgeRelation(){
 		
-		String msgConcepts = this.getKnowledgeConcepts();		
+		this.message = this.getKnowledgeConcepts();
 		
 		MethodsSPARQL met = new MethodsSPARQL(this.ontologyPlace, this.ontologyURI);
 		Communication commAgent = new Communication(this.langTypeContent);
-		String[] queryConcepts = commAgent.getContent(msgConcepts);
+		String[] queryConcepts = commAgent.getContent(this.message);
 		String wordMsgFiltered;
 		ArrayList<String> listNonRelations = new ArrayList<String>();
 		ArrayList<String> listRelations = new ArrayList<String>();
