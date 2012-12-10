@@ -24,8 +24,7 @@ import ontocomAgent.ontology.MethodsSPARQL;
 
 public class Mediator {
 	
-	private String ontologyPlace;
-	private String ontologyURI;
+	private String ontologyPath;
 	private String message;
 	public int langTypeContent;
 
@@ -36,32 +35,22 @@ public class Mediator {
 	/**
 	 * Constructor of the class.
 	 * @param ontology path where is the .owl file ontology.
-	 * @param ontologyURI URI pattern of ontology (Ex: "http://ontologies.com/ontology_name").
 	 * @param agentMessage path where is the agent message.txt or the agent message in plain text.
 	 * @param codContent code that represents the message format agent. In Communication javadoc has more details (0 if parameter agentMessage own message in plain text or 1 if the parameter own path to a .txt file with the message in KQML). 
 	 */
-	public Mediator(String ontology, String ontologiyURI, String agentMessage, int codContent){
-		this.ontologyPlace = ontology;
-		this.ontologyURI = ontologiyURI;
+	public Mediator(String ontology, String agentMessage, int codContent){
+		this.ontologyPath = ontology;
 		this.message = agentMessage;
 		this.langTypeContent = codContent;
 		
 	}
 	
-	public String getOntologyPlace() {
-		return ontologyPlace;
+	public String getOntologyPath() {
+		return ontologyPath;
 	}
 
-	public void setOntologyPlace(String ontologyPlace) {
-		this.ontologyPlace = ontologyPlace;
-	}
-
-	public String getOntologyURI() {
-		return ontologyURI;
-	}
-
-	public void setOntologyURI(String ontologyURI) {
-		this.ontologyURI = ontologyURI;
+	public void setOntologyPath(String ontologyPlace) {
+		this.ontologyPath = ontologyPlace;
 	}
 
 	public String getMessage() {
@@ -77,7 +66,7 @@ public class Mediator {
 	 */
 	public String getKnowledgeConcepts(){
 		
-		MethodsSPARQL met = new MethodsSPARQL(this.ontologyPlace, this.ontologyURI);
+		MethodsSPARQL met = new MethodsSPARQL(this.ontologyPath);
 		Communication commAgent = new Communication(this.langTypeContent);
 		String[] queryConcepts = commAgent.getContent(this.message);
 		String messageResultAgent = "";
@@ -132,7 +121,7 @@ public class Mediator {
 			queryResultOntology = sparql.listResults(consulta);
 			//System.out.println("Resultado: "+resultados.get(0).toString());
 			
-			if(queryResultOntology.size() > 0){ //se existir resultados da ontologia
+			if(queryResultOntology.size() > 0){ //if it exists results the ontology
 				
 				result = queryResultOntology.get(0).toString().replaceAll("[(-)]", "");		
 				result = result.replaceAll("\\<","");
@@ -154,8 +143,7 @@ public class Mediator {
 				
 				// if is a comment class tag
 				if(tagRDF.compareTo("rdfs:comment") == 0){
-
-					//MetodosSPARQL test = new MetodosSPARQL(this.localOntologia, this.ontologiaURI);
+					
 					String concept = sparql.getClassSynonym(wordSearch);
 					//System.out.println("Concept: "+concept);
 					
@@ -209,7 +197,7 @@ public class Mediator {
 		
 		this.message = this.getKnowledgeConcepts();
 		
-		MethodsSPARQL met = new MethodsSPARQL(this.ontologyPlace, this.ontologyURI);
+		MethodsSPARQL met = new MethodsSPARQL(this.ontologyPath);
 		Communication commAgent = new Communication(this.langTypeContent);
 		String[] queryConcepts = commAgent.getContent(this.message);
 		String wordMsgFiltered;

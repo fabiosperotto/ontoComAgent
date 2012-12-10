@@ -29,7 +29,7 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 public class OntologyOnline extends MethodsSPARQL{
 
 	public OntologyOnline(String ontologyURL) {
-		super(ontologyURL,ontologyURL+"#");  	        
+		super(ontologyURL);  	        
 	}
 	
 	/**

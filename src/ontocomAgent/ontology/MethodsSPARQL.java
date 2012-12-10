@@ -49,7 +49,6 @@ import java.util.Iterator;
 public class MethodsSPARQL {
 	
 	protected String archive;
-    protected String ontologyURI;
     protected OntModel model;
     private String queryPrefix;
     private QueryExecution executedQuery; //will use to remove existing query in memory
@@ -57,13 +56,11 @@ public class MethodsSPARQL {
     /**
      * Construtor da Classe.
      * @param fileOntology String with the path of .owl file
-     * @param ontologyURI String with the URI of ontology, in the format: 
      * "http://www.repositorioontologia.com/ontologia.owl#".
      */
-    public MethodsSPARQL(String fileOntology, String ontologyURI){
+    public MethodsSPARQL(String fileOntology){
         
         this.archive = fileOntology;
-        this.ontologyURI = ontologyURI;
         this.queryPrefix = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> "+
         					   "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n";
     }
@@ -94,12 +91,15 @@ public class MethodsSPARQL {
     
     /**
      * <p>
-     * Simple method to return the URI of the ontology to be used in class.
+     * Simple method to return the URI prefix of the ontology.
      * </p>
      * @return Returns the URI of the ontology.
      */
     public String getURIModel(){
-        return this.ontologyURI;
+    	
+    	String[] URImap = this.model.getNsPrefixMap().values().toArray(new String[0]);
+        //System.out.println(URImap[0]);
+        return URImap[0];
     }
     
     /**
@@ -110,7 +110,7 @@ public class MethodsSPARQL {
      * @return Retorna ResultSet variable with the query results.
      */
     private ResultSet executeQuery(String queryString){
-        Query query = QueryFactory.create( this.queryPrefix+queryString );
+        Query query = QueryFactory.create( this.queryPrefix + queryString );
 
         // executando a consulta e retornando os resultados
         this.openOntology();
@@ -147,7 +147,7 @@ public class MethodsSPARQL {
      */
     public boolean hasResults(String queryString){
     	
-    	Query query = QueryFactory.create( this.queryPrefix+queryString );
+    	Query query = QueryFactory.create( this.queryPrefix + queryString );
     	this.openOntology();
         this.executedQuery = QueryExecutionFactory.create(query, this.model);
         ResultSet results = this.executedQuery.execSelect();
@@ -171,7 +171,7 @@ public class MethodsSPARQL {
     @SuppressWarnings("rawtypes")
 	public ArrayList listResults(String queryString){
     	
-    	Query query = QueryFactory.create( this.queryPrefix+queryString );
+    	Query query = QueryFactory.create( this.queryPrefix + queryString );
     	this.openOntology();
         this.executedQuery = QueryExecutionFactory.create(query, this.model);
         ResultSet results = this.executedQuery.execSelect();    	
@@ -207,7 +207,7 @@ public class MethodsSPARQL {
         String queryString =
             "select ?subclasses "+
             "where { "+
-            "?subclasses rdfs:subClassOf <"+ this.ontologyURI + className +">  "+
+            "?subclasses rdfs:subClassOf <"+ this.getURIModel() + className +">  "+
             "} \n ";
         
         getSimpleQuery( this.queryPrefix + queryString );
@@ -222,10 +222,10 @@ public class MethodsSPARQL {
     public void getSubIndividuos(String className){
     	
     	this.openOntology();
-        OntClass seedClass = this.model.getOntClass(this.ontologyURI + className);
+        OntClass seedClass = this.model.getOntClass(this.getURIModel() + className);
         
-        // se incluir o asterisco em subClassOf [subClassOf*] vai incluir
-        // o proprio individuo da seedClass
+        // if it includes the asterisk in subClassOf [subClassOf*] will include 
+        // the individual's own seedClass
         String queryString =             
             "SELECT ?individuo "
                 + "WHERE {  "
@@ -295,7 +295,7 @@ public class MethodsSPARQL {
      * <p>
      * Procedure to filter results of SPARQL queries, in the form of strings.
      * </p>
-     * @param strManipular The string to be manipulated.
+     * @param strToManipulate The string to be manipulated.
      * @return String clean in URI format.
      */
     public String filterCharQuery(String strToManipulate){
@@ -377,7 +377,7 @@ public class MethodsSPARQL {
     	String queryString = null;
 
     	this.openOntology();
-    	Property annotation = this.model.getAnnotationProperty(this.ontologyURI + "sinonimo");
+    	Property annotation = this.model.getAnnotationProperty(this.getURIModel() + "sinonimo");
         
         if(annotation != null){
             //System.out.println(anotacao);
@@ -539,7 +539,7 @@ public class MethodsSPARQL {
      * with another resource and the resource value).
      * </p>
      * @param queryString Query to be held.
-     * @param listaColunas An ArrayList with the name of the two columns surveyed in queryString (beginning with '?')
+     * @param listColumns An ArrayList with the name of the two columns surveyed in queryString (beginning with '?')
      * @return Array with 2 results, odd positions with the column name, position even with value name that came the query.
      */
     public String[] getArrayIndValue(String queryString, ArrayList<String> listColumns){
@@ -627,7 +627,6 @@ public class MethodsSPARQL {
         QuerySolution soln; //to retrieve better SPARQL columns, see the soln.get() below   
         RDFNode nodo;
         Resource resource; //providing a way to manipulate the RDFNode into ontology class, see below
-        
          
          for ( ; results.hasNext() ; ){
              
@@ -655,17 +654,17 @@ public class MethodsSPARQL {
     	
     	this.openOntology();
     	if(upperCase == 0){
-    		property =  this.ontologyURI + propertyName;
+    		property =  this.getURIModel() + propertyName;
     	}
     	
     	if(upperCase == 1){
-    		property = this.ontologyURI + this.getFirstUpperCase(propertyName);    		
+    		property = this.getURIModel() + this.getFirstUpperCase(propertyName);    		
     	}
     	
     	if(this.model.getObjectProperty(property) == null){
     		 property = null;
     	 }
-  
+
     	return property;
     	
     }
@@ -685,7 +684,7 @@ public class MethodsSPARQL {
     	 
     	 for(int i = 0; i<wordsSearch.length; i++){
     		 
-    		 property = this.ontologyURI+this.getFirstUpperCase(wordsSearch[i]);
+    		 property = this.getURIModel() + this.getFirstUpperCase(wordsSearch[i]);
     		 if(this.model.getObjectProperty(property) != null){
     			 
     			 //System.out.println(property);
