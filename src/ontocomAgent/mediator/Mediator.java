@@ -1,3 +1,19 @@
+/**
+ *  This file is part of the program ontoComAgent.
+ *  ontoComAgent is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received <a href="lesser.txt" target=_blank>a copy of the GNU General Public License</a>
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package ontocomAgent.mediator;
 
 import java.util.ArrayList;
@@ -10,16 +26,6 @@ import ontocomAgent.ontology.MethodsSPARQL;
  * Class responsible to conduct the mediation of information agent. When able to manipulate the information that the agent is dealing, it is queried in the ontology. 
  * Next is returned to this mediating layer, so that it can return information to the agent.
  * </p>
-* <p align="justify">Este programa é um software livre; você pode redistribui-lo e/ou modifica-lo dentro dos termos da Licença Pública Geral GNU como 
-* publicada pela Fundação do Software Livre (FSF); na versão 3 da Licença.
-* Este programa é distribuido na esperança que possa ser útil, mas SEM NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer 
-* MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU para maiores detalhes.
-* Você deve ter recebido <a href="lesser.txt" target=_blank>uma cópia da Licença Pública Geral GNU</a> junto com este programa, se não, escreva para a Fundação do Software 
-* Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA</p>
-* <br/><br/>
-* @author Fabio Aiub Sperotto<br/>
-*		<a href="mailto:fabio.aiub@gmail.com">email</a>
-* <br/>
 **/
 
 public class Mediator {
@@ -49,8 +55,8 @@ public class Mediator {
 		return ontologyPath;
 	}
 
-	public void setOntologyPath(String ontologyPlace) {
-		this.ontologyPath = ontologyPlace;
+	public void setOntologyPath(String ontologyPath) {
+		this.ontologyPath = ontologyPath;
 	}
 
 	public String getMessage() {
@@ -83,9 +89,9 @@ public class Mediator {
 			
 		}else{
 			System.out.println("Language content not understood. Please verify that the code inserted " +
-					"object instantiation class mediator. \nThe reported source "+this.langTypeContent+" " +
-							"can be wrong or ontoComAgent not prepared to deal with that kind of language content. " +
-							"\nPlease check javadoc Communication class.");
+				"object instantiation class mediator. \nThe reported source "+this.langTypeContent+" " +
+				"can be wrong or ontoComAgent not prepared to deal with that kind of language content. " +
+				"\nPlease check javadoc Communication class.");
 			return null;
 		}			 
 	}
@@ -113,12 +119,12 @@ public class Mediator {
 			
 			wordSearch = this.filterSymbols(queryConcepts[i]);
 			
-			String consulta = "SELECT * WHERE{ " +
+			String query = "SELECT * WHERE{ " +
 					"?s ?p ?o. " +
 					"FILTER (regex(?o, '"+wordSearch+"', 'i'))}\n";
 
 			ArrayList queryResultOntology = new ArrayList();
-			queryResultOntology = sparql.listResults(consulta);
+			queryResultOntology = sparql.listResults(query);
 			//System.out.println("Resultado: "+resultados.get(0).toString());
 			
 			if(queryResultOntology.size() > 0){ //if it exists results the ontology
@@ -128,14 +134,14 @@ public class Mediator {
 				result = result.replaceAll("\\>","");
 				//System.out.println(resultado);						
 				
-				int inicioColuna, fimColuna;
+				int startColumn, endColumn;
 				
 				for(j = 0; j<columns.length; j++){
 				
-					inicioColuna = result.indexOf(columns[j]);
-					inicioColuna += 5;
-					fimColuna = result.indexOf(" ", inicioColuna);
-					columnsExtracted[j] = result.substring(inicioColuna, fimColuna);
+					startColumn = result.indexOf(columns[j]);
+					startColumn += 5;
+					endColumn = result.indexOf(" ", startColumn);
+					columnsExtracted[j] = result.substring(startColumn, endColumn);
 				
 				}
 				tagRDF = columnsExtracted[0].replaceAll("http.+#","");
@@ -198,7 +204,7 @@ public class Mediator {
 		this.message = this.getKnowledgeConcepts();
 		
 		MethodsSPARQL met = new MethodsSPARQL(this.ontologyPath);
-		Communication commAgent = new Communication(this.langTypeContent);
+		Communication commAgent = new Communication(0);
 		String[] queryConcepts = commAgent.getContent(this.message);
 		String wordMsgFiltered;
 		ArrayList<String> listNonRelations = new ArrayList<String>();
@@ -290,6 +296,18 @@ public class Mediator {
 		}
 		
 		return this.message;
+	}
+	
+	/**
+	 * Use a method do return an actual ontology URI prefix
+	 * @return a String with ontology URI
+	 */
+	public String getOntologyPrefix(){
+		String ontologyPrefix = null;
+		
+		MethodsSPARQL met = new MethodsSPARQL(this.ontologyPath);
+		ontologyPrefix = met.getURIModel();
+		return ontologyPrefix;
 	}
 	
 	/**
