@@ -226,7 +226,7 @@ public class MethodsSPARQL {
      * </p>
      * @param className A string referencing the class name (not the URI).
      */
-    public void getSubIndividuos(String className){
+    public void getSubIndividuals(String className){
     	
     	this.openOntology();
         OntClass seedClass = this.model.getOntClass(this.getURIModel() + className);
@@ -320,6 +320,7 @@ public class MethodsSPARQL {
     
     /**
      * <p>
+     * This is a method example to obtain a columns treatment in an SPARL query
      * Returns the result of the following SPARQL query:
      * <br/><br/><code>
      * 
@@ -412,9 +413,7 @@ public class MethodsSPARQL {
                 }
         	}
         }
-        return queryString;
-    	
-    	
+        return queryString;    	    	
     }
     
     /**
