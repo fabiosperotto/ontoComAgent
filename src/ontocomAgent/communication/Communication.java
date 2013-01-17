@@ -46,12 +46,12 @@ public class Communication {
 	 */
 	public String[] getContent(String agentMessage){
 				
-		String[] conteudoConsulta = null;
+		String[] messageContentSplited = null;
 
 		
 		if(this.messageType == 0){ //if 0 is a simple string with message from Agent
 			
-			conteudoConsulta = agentMessage.split(" ");
+			messageContentSplited = agentMessage.split(" ");
 
 		}
 		
@@ -62,19 +62,25 @@ public class Communication {
 			int size = msgArray.length;
 			int i,j;
 			
-			String conteudoMsg = null;			
+			String msgContent = null;	
+			int stopSearch = 0; //provides a simple way to stop second loop before a null occur
 			for(i=0; i<size; i++){			
 				for(j=0; j<2; j++){	
-					
+					//System.out.println("COISA "+msgArray[i][j]);
 					if(msgArray[i][j].contains(":content")){					
-						conteudoMsg = msgArray[i][j+1];
-						//System.out.println("Mensagem do agente: "+conteudoMsg);
+						msgContent = msgArray[i][j+1];
+						//System.out.println("agent message: "+msgContent);
+						stopSearch++;
+						break;
 					}										
 				}
+				if(stopSearch > 0){
+					break;
+				}
 			}
-			conteudoConsulta = conteudoMsg.split(" ");
+			messageContentSplited = msgContent.split(" ");
 		}
-		return conteudoConsulta;
+		return messageContentSplited;
 	}
 	
 	/**

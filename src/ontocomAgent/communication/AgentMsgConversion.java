@@ -1,27 +1,29 @@
+/**
+ *  This file is part of the program ontoComAgent.
+ *  ontoComAgent is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *   (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received <a href="lesser.txt" target=_blank>a copy of the GNU General Public License</a>
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package ontocomAgent.communication;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.LineNumberReader;
+import java.io.FileReader;
 
 /**
  * <p>
  * This class aims to be a tool to convert messages into KQML derived from text files (.txt) in two-dimensional arrays.
  * </p>
- * <p align="justify">Este programa é um software livre; você pode redistribui-lo e/ou modifica-lo dentro dos termos da Licença Pública Geral GNU como 
- * publicada pela Fundação do Software Livre (FSF); na versão 3 da Licença.
- * Este programa é distribuido na esperança que possa ser útil, mas SEM NENHUMA GARANTIA; sem uma garantia implicita de ADEQUAÇÂO a qualquer 
- * MERCADO ou APLICAÇÃO EM PARTICULAR. Veja a Licença Pública Geral GNU para maiores detalhes.
- * Você deve ter recebido <a href="lesser.txt" target=_blank>uma cópia da Licença Pública Geral GNU</a> junto com este programa, se não, escreva para a Fundação do Software 
- * Livre(FSF) Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA</p>
- * <br/><br/>
- * @author Fabio Aiub Sperotto<br/>
- *		<a href="mailto:fabio.aiub@gmail.com">email</a>
- * <br/>
  */
 public class AgentMsgConversion {
 	
@@ -56,33 +58,23 @@ public class AgentMsgConversion {
 	 * @return maxRows
 	 */
 	public int countFileRows(){
-		int maxRows = 0;
+		int maxRows = 0;	
 		
-		try {
-			
-			File file = new File(this.archive);
-
-			// get the size of file
-			long sizeFile = file.length();
-			FileInputStream inputStream = new FileInputStream(file);
-			DataInputStream inputData = new DataInputStream(inputStream);
-
-			LineNumberReader lineRead = new LineNumberReader(new InputStreamReader(inputData));
-			lineRead.skip(sizeFile);
-			// count the lines from file, start in zero
-			maxRows = lineRead.getLineNumber();
-			//System.out.println("lines in file: " + maxRows);
-			
-			inputStream.close();
-			inputData.close();
-			lineRead.close();
-
-			}catch (IOException error) {
-				System.out.println("Error countFileRows: "+error.getMessage());
-				System.exit(0);
-			}
 		
-		return maxRows;
+		try {  
+			FileReader file = new FileReader(this.archive);  
+	        BufferedReader buffer = new BufferedReader(file);
+	        
+			while((buffer.readLine()) != null){
+				 maxRows++;
+		    }
+			 
+			file.close(); 
+		} catch (IOException err) {  
+			System.out.println("Error countFileRows: "+err.getMessage());
+		   
+		} 				
+		return maxRows;		
 	}
 	
 	/**
@@ -131,20 +123,17 @@ public class AgentMsgConversion {
 	 * @return String[][] mounted with 2 columns
 	 */	
 	public String[][] getMessageArray(){
-		
+	
 		int maxRows = countFileRows();
 		int maxCol = 2;
-        
         String[][] mounted = new String[maxRows][maxCol];
         int row = 0;
-		
-		try{
+        
+		try{			
 			
-			File file = new File(this.archive);
-			
-			FileInputStream inputs = new FileInputStream(file);  
-            InputStreamReader reader = new InputStreamReader(inputs);  
-            BufferedReader buffer = new BufferedReader(reader);
+			FileReader file = new FileReader(this.archive);  
+            BufferedReader buffer = new BufferedReader(file);
+
                                                 
             mounted[row][maxCol-2] = "Performative";
             
@@ -180,15 +169,13 @@ public class AgentMsgConversion {
             	
             }                 
                         
-            inputs.close();
-            reader.close();
-            buffer.close();
+            file.close();      
                         
 		}catch(IOException error){
 			System.out.println("Error getMessageArray: "+error.getMessage());
-			System.exit(0);
-			
+			//System.exit(0);			
 		}
+		
 		return mounted;
 	}	
 }
