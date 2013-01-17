@@ -27,7 +27,6 @@ import ontocomAgent.ontology.MethodsSPARQL;
  * Next is returned to this mediating layer, so that it can return information to the agent.
  * </p>
 **/
-
 public class Mediator {
 	
 	private String ontologyPath;
