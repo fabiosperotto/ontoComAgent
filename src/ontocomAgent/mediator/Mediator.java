@@ -13,7 +13,6 @@
  *  You should have received <a href="lesser.txt" target=_blank>a copy of the GNU General Public License</a>
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package ontocomAgent.mediator;
 
 import java.util.ArrayList;
