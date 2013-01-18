@@ -322,7 +322,11 @@ public class Mediator {
 			    					this.message = this.message.replaceAll(listNonRelations.get(j), "");
 			    				}			    				    							    				
 			    				
-			    				manipulating = listNonRelations.get(j)+" "+manipulating;			    				
+			    				if(manipulating.indexOf(listNonRelations.get(j)) == -1){
+			    					
+			    					manipulating = listNonRelations.get(j)+" "+manipulating;
+			    				}
+			    							    				
 			    			}
 			    		}
 
@@ -346,7 +350,10 @@ public class Mediator {
 		    					this.message = this.message.replaceAll(listNonRelations.get(j), "");
 		    				}
 		    				
-		    				manipulating = manipulating+" "+listNonRelations.get(j);
+		    				if(manipulating.indexOf(listNonRelations.get(j)) == -1){
+		    					
+		    					manipulating = manipulating+" "+listNonRelations.get(j);
+		    				}
 		    			}
 		    			
 		    		}
@@ -355,6 +362,8 @@ public class Mediator {
 		    	if(this.hasSpecialChars(listRelations.get(w))){ //have special characters
 
 		    		this.message = this.message.replaceAll("\\"+listRelations.get(w), manipulating);
+		    	}else{
+		    		this.message = this.message.replaceAll(listRelations.get(w), manipulating);
 		    	}
 		    	
 			}
