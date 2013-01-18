@@ -626,8 +626,9 @@ public class MethodsSPARQL {
     							"WHERE { <"+propertyURI+"> rdfs:"+rdfTag+" ?"+rdfTag+" . " +
     							"}";
     	
-    	ResultSet resultsQuery = executeQuery( queryString );         
+    	ResultSet resultsQuery = executeQuery( queryString );     	  
         Iterator<QuerySolution> results = resultsQuery;
+
         QuerySolution soln; //to retrieve better SPARQL columns, see the soln.get() below   
         RDFNode nodo;
         Resource resource; //providing a way to manipulate the RDFNode into ontology class, see below
@@ -635,12 +636,12 @@ public class MethodsSPARQL {
          for ( ; results.hasNext() ; ){
              
              soln = results.next();
-             nodo = soln.get("?"+rdfTag);
+             nodo = soln.get("?"+rdfTag);             
              resource = (Resource)nodo;
-             //relationList.add(soln.getResource("?"+rdfTag).toString());
-             relationList.add(resource.getLocalName());
             
-             //System.out.println("Find: "+soln.get("?range"));
+             //relationList.add(soln.getResource("?"+rdfTag).toString());
+             relationList.add(resource.getLocalName());            
+             //System.out.println("Find: "+soln.get("?"+rdfTag));
          }
         this.executedQuery.close();
     	return relationList;

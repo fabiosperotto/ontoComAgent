@@ -65,7 +65,9 @@ public class Mediator {
 	}
 	
 	/**
+	 * <p>
 	 * Performs the search for knowledge using the agent message.
+	 * </p>
 	 */
 	public String getKnowledgeConcepts(){
 		
@@ -91,12 +93,14 @@ public class Mediator {
 				"\nPlease check javadoc Communication class.");
 			return null;
 		}			 
-	}
+	}		
 	
 	/**
+	 * <p>
 	 * Perform a search where every word is consulted in the ontology, 
 	 * checking if the word is part of some content (information from individual/subject). 
 	 * If the word is in the comment of a class, it is checked whether it is a synonym.
+	 * </p>
 	 * @return ArrayList<String> containing all information found.
 	 */
 	@SuppressWarnings("rawtypes")
@@ -110,11 +114,13 @@ public class Mediator {
 		String tagRDF;
 		String wordSearch;
 		
+		
 		int i,j;
 		
 		for(i = 0; i<queryConcepts.length; i++){
 			
 			wordSearch = this.filterSymbols(queryConcepts[i]);
+			//System.out.println("palavra: "+wordSearch);
 			
 			String query = "SELECT * WHERE{ " +
 					"?s ?p ?o. " +
@@ -128,8 +134,7 @@ public class Mediator {
 				
 				result = queryResultOntology.get(0).toString().replaceAll("[(-)]", "");		
 				result = result.replaceAll("\\<","");
-				result = result.replaceAll("\\>","");
-				//System.out.println(resultado);						
+				result = result.replaceAll("\\>","");									
 				
 				int startColumn, endColumn;
 				
@@ -151,8 +156,9 @@ public class Mediator {
 					//System.out.println("Concept: "+concept);
 					
 					if(concept != null){
-						//info = ", "+queryConcepts[i].replace('?', ' ')+" é sinônimo de "+concept;
-						info = " "+concept;
+						//sometimes, special characters of original message are lost, then 
+						//the next method retuns the lost chars to all words
+						info = " "+this.getSpecialChars(concept, queryConcepts[i]);
 						//System.out.println(info);
 						finalResultConcepts.add(info);
 					}
@@ -172,16 +178,72 @@ public class Mediator {
 	/**
 	 * <p>
 	 * Function to clean words with special characters.
-	 * </p>
+	 *</p>
 	 * @param normalWord the word to be removed special characters
 	 * @return new word without special characters
 	 */
 	public String filterSymbols(String normalWord){
 		
 		String newWord = null;
-		newWord = normalWord.replaceAll("\\W", "").trim();
+		newWord = normalWord.replaceAll("\\W", "").trim();	
 		return newWord;
 		
+	}		
+	
+	/**
+	 * <p>
+	 * A simple method to add special characters, from one reference word, in a new word.
+	 * </p>
+	 * @param a simple word without special characters
+	 * @param wordSpecialChars a word with special characters
+	 * @return a new word with simpleWord plus special characters
+	 */
+	public String getSpecialChars(String simpleWord, String wordSpecialChars){
+		
+		String stringMounted = simpleWord;
+		String[] specialCharsList = {"#", "?", ":", ";", "=", "<", ">", "-", "^", "$", "%", "&", "*"};
+				
+		int pos = 0;
+		for(int i = 0; i < specialCharsList.length; i++){
+			
+			pos = wordSpecialChars.indexOf(specialCharsList[i]);
+			if(pos != -1){
+				
+				if(pos == 0){
+					stringMounted = specialCharsList[i]+stringMounted;
+					
+				}else{
+					stringMounted = stringMounted+specialCharsList[i];
+				}			
+			}
+		}
+		return stringMounted;
+	}
+	
+	/**
+	 * <p>
+	 * Method for testing a string to search for special characters.
+	 * </p>
+	 * @param testWord word to be tested
+	 * @return true true if there is at least one special character, false otherwise
+	 */
+	public boolean hasSpecialChars(String testWord){
+		
+		String[] specialCharsList = {"#", "?", ":", ";", "=", "<", ">", "-", "^", "$", "%", "&", "*"};
+		int count = 0;
+		
+		for(int i = 0; i < specialCharsList.length; i++){
+			
+			if(testWord.indexOf(specialCharsList[i]) != -1){
+				count++;
+			}
+		}
+		
+		if(count == 0){
+			return false;
+		}else{
+			return true;
+		}
 	}
 
 	/**
@@ -198,7 +260,7 @@ public class Mediator {
 	 */
 	public String getKnowledgeRelation(){
 		
-		this.message = this.getKnowledgeConcepts();
+		this.message = this.getKnowledgeConcepts();		
 		
 		MethodsSPARQL met = new MethodsSPARQL(this.ontologyPath);
 		Communication commAgent = new Communication(0);
@@ -213,7 +275,7 @@ public class Mediator {
 			
 			wordMsgFiltered = this.filterSymbols(queryConcepts[i]);
 
-			property = met.getObjectProperty(wordMsgFiltered, 1);
+			property = met.getObjectProperty(wordMsgFiltered, 1); //1 to upper first letter
 			
 			if (property != null){
 				//System.out.println("Find: "+property);
@@ -232,35 +294,41 @@ public class Mediator {
 				
 				property = this.filterSymbols(listRelations.get(w));
 				manipulating = listRelations.get(w);
-				//met.getRelationship(this.filterSymbols(listRelations.get(0)));
+				//met.getRelationship(this.filterSymbols(listRelations.get(0)));				
 				
 				ArrayList<String> relationList = new ArrayList<String>();
 				property = met.getObjectProperty(property,1);
 				
 				//getting the object property range concepts
-				relationList = met.getObjectRelationProperty(property, "domain");		    					
+				relationList = met.getObjectRelationProperty(property, "domain");
 				
-		    	for(int i = 0; i < relationList.size(); i++){
-		    		
-		    		for(int j = 0; j< listNonRelations.size(); j++){
-	
-		    			
-		    			if(this.filterSymbols(listNonRelations.get(j)).contains(relationList.get(i))){
-
-		    				if(listNonRelations.get(j).contains("?")){
-		    					
-		    					this.message = this.message.replaceAll("\\"+listNonRelations.get(j), "");
-		    					
-		    				}else{
-		    					this.message = this.message.replaceAll(listNonRelations.get(j), "");
-		    				}
-		    				 	    				
-		    				manipulating = listNonRelations.get(j)+" "+manipulating;
-		    				
+				if(relationList.size() != 0){
+					
+					for(int i = 0; i < relationList.size(); i++){	
+						
+						if(relationList.get(i) == null){
+		    				break;
 		    			}
-		    		}
 
-		    	}
+			    		for(int j = 0; j < listNonRelations.size(); j++){			    						    			
+				    						    			
+			    			if(this.filterSymbols(listNonRelations.get(j)).contains(relationList.get(i))){			    						    		
+			    				
+			    				if(this.hasSpecialChars(listNonRelations.get(j))){ //if has special character
+			    					
+			    					this.message = this.message.replaceAll("\\"+listNonRelations.get(j), "");
+			    					
+			    				}else{
+			    					this.message = this.message.replaceAll(listNonRelations.get(j), "");
+			    				}			    				    							    				
+			    				
+			    				manipulating = listNonRelations.get(j)+" "+manipulating;			    				
+			    			}
+			    		}
+
+			    	}					
+				}				
+		    	
 		    	//getting the object property range concepts
 		    	relationList = met.getObjectRelationProperty(property, "range");
 		    	    	
@@ -269,24 +337,24 @@ public class Mediator {
 		    		for(int j = 0; j< listNonRelations.size(); j++){
 		    			
 		    			if(this.filterSymbols(listNonRelations.get(j)).contains(relationList.get(i))){ //if one is equal another one
-
-		    				if(listNonRelations.get(j).contains("?")){ //if has special character
+		    				//System.out.println("ANTES: "+this.message);
+		    				if(this.hasSpecialChars(listNonRelations.get(j))){ //if has special character
 		    					
 		    					this.message = this.message.replaceAll("\\"+listNonRelations.get(j), "");
 		    					
 		    				}else{
 		    					this.message = this.message.replaceAll(listNonRelations.get(j), "");
 		    				}
-
+		    				
 		    				manipulating = manipulating+" "+listNonRelations.get(j);
 		    			}
 		    			
 		    		}
 		    	}
 		    	
-		    	if(listRelations.get(w).contains("?") || listRelations.get(w).contains("#")){ //clearing up special characters
+		    	if(this.hasSpecialChars(listRelations.get(w))){ //have special characters
 
-		    		this.message = this.message.replaceAll("\\"+listRelations.get(w), manipulating).trim();
+		    		this.message = this.message.replaceAll("\\"+listRelations.get(w), manipulating);
 		    	}
 		    	
 			}
@@ -296,7 +364,9 @@ public class Mediator {
 	}
 	
 	/**
-	 * Use a method do return an actual ontology URI prefix
+	 * <p>
+	 * Use a method do return an actual ontology URI prefix.
+	 * </p>
 	 * @return a String with ontology URI
 	 */
 	public String getOntologyPrefix(){
@@ -308,7 +378,9 @@ public class Mediator {
 	}
 	
 	/**
+	 * <p>
 	 * Returns the synonym that has the highest degree of membership Fuzzy.
+	 * </p>
 	 * @param fuzzySet String[][] containing in the first index the degrees and the second index the synonym.
 	 * @return String containing synonymous with the highest degree.
 	 */
