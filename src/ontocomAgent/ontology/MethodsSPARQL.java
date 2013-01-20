@@ -27,7 +27,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * <p>
@@ -628,24 +627,54 @@ public class MethodsSPARQL {
     							"WHERE { <"+propertyURI+"> rdfs:"+rdfTag+" ?"+rdfTag+" . " +
     							"}";
     	
-    	ResultSet resultsQuery = executeQuery( queryString );     	  
-        Iterator<QuerySolution> results = resultsQuery;
+    	ResultSet resultsQuery = executeQuery( queryString );    	
 
         QuerySolution soln; //to retrieve better SPARQL columns, see the soln.get() below   
         RDFNode nodo;
         Resource resource; //providing a way to manipulate the RDFNode into ontology class, see below
-         
-         for ( ; results.hasNext() ; ){
+
+        while ( resultsQuery.hasNext() ){
              
-             soln = results.next();
-             nodo = soln.get("?"+rdfTag);             
-             resource = (Resource)nodo;
+        	soln = resultsQuery.next();
+            nodo = soln.get("?"+rdfTag);
+            //System.out.println("Find: "+soln.get("?"+rdfTag));
             
-             //relationList.add(soln.getResource("?"+rdfTag).toString());
-             relationList.add(resource.getLocalName());            
-             //System.out.println("Find: "+soln.get("?"+rdfTag));
-         }
-        this.executedQuery.close();        
+            // checking if the content result is a abstract resource (have 'http'):
+            // for resources in ontology and URI, see http://www.faqs.org/rfcs/rfc2396.html
+            if(soln.get("?"+rdfTag).toString().indexOf("http:") == -1){
+            	Property objProperty = this.model.getObjectProperty(propertyURI);
+				@SuppressWarnings("rawtypes")
+				Iterator iteract = null;
+				
+				//list of domain concepts from propertyURI
+            	if(rdfTag.contentEquals("domain")){
+            		iteract = ((OntProperty) objProperty).getDomain().asClass().asUnionClass().listOperands();
+            	}
+            	
+            	//list of range concepts from propertyURI
+            	if(rdfTag.contentEquals("range")){
+            		iteract = ((OntProperty) objProperty).getRange().asClass().asUnionClass().listOperands();
+            	}
+            	
+            	//requirement of the project is the use of ArrayList<String>
+            	//the follow code try to fix this
+            	while( iteract.hasNext()){
+            		relationList.add(iteract.next().toString());
+            	}
+            	
+            	//nothing else to do, jump off!
+            	break;
+            	
+            }else{
+            	
+            	resource = (Resource)nodo;                
+                //relationList.add(soln.getResource("?"+rdfTag).toString());
+                relationList.add(resource.getLocalName());
+            }
+                        
+             
+        }        
+        this.executedQuery.close();  
     	return relationList;
     }   
   
