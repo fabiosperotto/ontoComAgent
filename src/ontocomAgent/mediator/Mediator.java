@@ -368,7 +368,8 @@ public class Mediator {
 		    	
 			}
 		}
-		
+		this.message = this.message.replaceAll("  ", " ");
+		this.message = this.message.replaceAll("  ", " ");
 		return this.message;
 	}
 	
