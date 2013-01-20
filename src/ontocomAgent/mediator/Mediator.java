@@ -275,7 +275,7 @@ public class Mediator {
 			
 			wordMsgFiltered = this.filterSymbols(queryConcepts[i]);
 
-			property = met.getObjectProperty(wordMsgFiltered, 1); //1 to upper first letter
+			property = met.getObjectPropertyURI(wordMsgFiltered, 1); //1 to upper first letter
 			
 			if (property != null){
 				//System.out.println("Find: "+property);
@@ -297,7 +297,7 @@ public class Mediator {
 				//met.getRelationship(this.filterSymbols(listRelations.get(0)));				
 				
 				ArrayList<String> relationList = new ArrayList<String>();
-				property = met.getObjectProperty(property,1);
+				property = met.getObjectPropertyURI(property,1);
 				
 				//getting the object property range concepts
 				relationList = met.getObjectRelationProperty(property, "domain");

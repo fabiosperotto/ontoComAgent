@@ -17,6 +17,7 @@ package ontocomAgent.ontology;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
 import com.hp.hpl.jena.ontology.OntModelSpec;
+import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.query.*;
 import com.hp.hpl.jena.rdf.model.*;
 import com.hp.hpl.jena.util.FileManager;
@@ -26,6 +27,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * <p>
@@ -643,9 +645,9 @@ public class MethodsSPARQL {
              relationList.add(resource.getLocalName());            
              //System.out.println("Find: "+soln.get("?"+rdfTag));
          }
-        this.executedQuery.close();
+        this.executedQuery.close();        
     	return relationList;
-    }
+    }   
   
     /**
      * Search and returns an object property, considering the name of the property has the first capitalized letter or not.
@@ -653,7 +655,7 @@ public class MethodsSPARQL {
      * @param upperCase indicate 0 if the propertyName is certain equal in ontology. Indicate 1 if needs upper the firts letter of propertyName.
      * @return URI of a true object property or null if the propertyName not exists in ontology.
      */
-    public String getObjectProperty(String propertyName, int upperCase){
+    public String getObjectPropertyURI(String propertyName, int upperCase){
     	
     	String property = null;
     	
