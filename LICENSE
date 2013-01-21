@@ -176,6 +176,13 @@
 
 =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+The ontoComAgent is a derivated work from Apache Jena (framework for  semantic 
+web applications). Apache Jena contains code contributed by other institutions 
+(see below) and your rights reserved.
+
+
+=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+
 The following files contain code contributed by Plugged In Software:
 
 src/main/java/com/hp/hpl/jena/rdf/arp/ExtendedHandler.java
