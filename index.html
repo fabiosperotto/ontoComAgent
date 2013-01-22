@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Ontocomagent : Biblioteca de interoperabilidade na comunicação entre Agentes (SMA) e Ontologia." />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Ontocomagent</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/fabiosperotto/ontoComAgent">View on GitHub</a>
+
+          <h1 id="project_title">Ontocomagent</h1>
+          <h2 id="project_tagline">Biblioteca de interoperabilidade na comunicação entre Agentes (SMA) e Ontologia.</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/fabiosperotto/ontoComAgent/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/fabiosperotto/ontoComAgent/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <p>Este projeto implementa um modelo de interoperabilidade na comunicação de agentes, utilizando Ontologia e Sinônimos. É uma biblioteca de programação para oferecer aos desenvolvedores de Sistemas Multiagentes uma opção na utilização de ontologias para apoiar a comunicação dos agentes de forma simples, sem a necessidade do conhecimento profundo sobre Ontologias e tecnologias de manipulação tais como SPARQL e <a href="http://jena.apache.org/">Jena</a>. Mais informações siga para a <a href="https://github.com/fabiosperotto/ontoComAgent/wiki">Wiki</a>.</p>
+
+<p>This project aims to develop a model for interoperability in communication agents, using Ontology and Synonyms. It is a programming library for offer Multiagent Systems developers a choice in the use of ontologies to support the communication of agents in a simple way without the need of deep knowledge on Ontologies and handling technologies such as SPARQL and <a href="http://jena.apache.org/">Jena</a>. More information see the <a href="https://github.com/fabiosperotto/ontoComAgent/wiki">Wiki</a>.</p>
+
+<h3>Existem três pacotes neste projeto:</h3>
+
+<h4>ontocomAgent.communication</h4>
+
+<ul>
+<li>AgentMsgConversion.java: métodos para extrair mensagens KQML de txt em arrays.</li>
+<li>Communication.java: utiliza a classe acima e manipula as mensagens para serem utilizadas pela classe Mediadora.java.</li>
+</ul><h4>ontocomAgent.mediator</h4>
+
+<ul>
+<li>Mediator.java responsável por buscar conhecimento sobre o conteúdo da mensagem do agente na ontologia. É esta classe que realiza a interoperabilidade entre a informação que o agente precisa e o que existe na ontologia.</li>
+</ul><h4>ontocomAgent.ontology</h4>
+
+<ul>
+<li>MethodsSPARQL.java: com uma série de procedimentos para realizar buscas de informações na ontologia, utiliza SPARQL para as consultas e faz referência a bilioteca <a href="http://jena.apache.org/">Jena</a>.</li>
+</ul>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Ontocomagent maintained by <a href="https://github.com/fabiosperotto">fabiosperotto</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
