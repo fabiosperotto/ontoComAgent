@@ -10,8 +10,11 @@ This project aims to develop a model for interoperability in communication agent
 
 
 ###Modelo
-O modelo pode ser conferido na figura abaixo (clique para ampliar)
+
+O modelo pode ser conferido na figura abaixo (clique para ampliar). Mais informações na [Wiki](https://github.com/fabiosperotto/ontoComAgent/wiki).
+
 <a href="http://img210.imageshack.us/img210/3405/diagramaaplicacao.png" target=_blank><img src="http://www.makeathumbnail.com/thumbnails/image143009.png"></a>
+
 A biblioteca ontoComAgent se baseia neste e se organiza em três pacotes:
 
 ####ontocomAgent.communication
