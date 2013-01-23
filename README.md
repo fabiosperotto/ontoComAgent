@@ -1,6 +1,7 @@
 #ontoComAgent - Biblioteca de interoperabilidade na comunicação entre Agentes e Ontologia
 
 
+[Página inicial do projeto](http://fabiosperotto.github.com/ontoComAgent/)
 
 Este projeto visa desenvolver um modelo de interoperabilidade na comunicação de agentes, utilizando Ontologia e Sinônimos. É uma biblioteca de programação para oferecer aos desenvolvedores de Sistemas Multiagentes uma opção na utilização de ontologias para apoiar a comunicação dos agentes de forma simples, sem a necessidade do conhecimento profundo sobre Ontologias e tecnologias de manipulação tais como SPARQL e [Jena](http://jena.apache.org/). Mais informações siga para a [Wiki](https://github.com/fabiosperotto/ontoComAgent/wiki).
 
@@ -9,13 +10,13 @@ This project aims to develop a model for interoperability in communication agent
 
 
 
-###Modelo
+##Modelo
 
 O modelo pode ser conferido na figura abaixo (clique para ampliar). Mais informações na [Wiki](https://github.com/fabiosperotto/ontoComAgent/wiki).
 
-<a href="http://img210.imageshack.us/img210/3405/diagramaaplicacao.png" target=_blank><img src="http://www.makeathumbnail.com/thumbnails/image143009.png"></a>
+<center><a href="http://img210.imageshack.us/img210/3405/diagramaaplicacao.png" target=_blank><img src="http://www.makeathumbnail.com/thumbnails/image143009.png"></a></center>
 
-A biblioteca ontoComAgent se baseia neste e se organiza em três pacotes:
+A biblioteca ontoComAgent se baseia neste modelo e se organiza em três pacotes:
 
 ####ontocomAgent.communication
 
