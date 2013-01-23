@@ -4,6 +4,9 @@
 
 Este projeto visa desenvolver um modelo de interoperabilidade na comunicação de agentes, utilizando Ontologia e Sinônimos. É uma biblioteca de programação para oferecer aos desenvolvedores de Sistemas Multiagentes uma opção na utilização de ontologias para apoiar a comunicação dos agentes de forma simples, sem a necessidade do conhecimento profundo sobre Ontologias e tecnologias de manipulação tais como SPARQL e [Jena](http://jena.apache.org/). Mais informações siga para a [Wiki](https://github.com/fabiosperotto/ontoComAgent/wiki).
 
+<a href="http://www.makeathumbnail.com/thumbnails/image143009.png" target=_blank><img src="http://img210.imageshack.us/img210/3405/diagramaaplicacao.png"></a>
+
+
 
 This project aims to develop a model for interoperability in communication agents, using Ontology and Synonyms. It is a programming library for offer Multiagent Systems developers a choice in the use of ontologies to support the communication of agents in a simple way without the need of deep knowledge on Ontologies and handling technologies such as SPARQL and [Jena](http://jena.apache.org/). More information see the [Wiki](https://github.com/fabiosperotto/ontoComAgent/wiki).
 
