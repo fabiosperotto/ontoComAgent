@@ -147,7 +147,7 @@ public class MethodsSPARQL {
     
     /**
      * <p>
-     * Checks for the query results. 
+     * Checking if a query returns rows.
      * </p>
      * @param queryString A string with any SPARQL query.
      * @return Returns true if the query has more than zero rows. False if otherwise.
@@ -167,6 +167,21 @@ public class MethodsSPARQL {
         	return false;
         }    	
     }
+    
+    /**
+     * This method execute ASK SPARQL query.
+     * @param queryString an query in ASK form.
+     * @return true if exist results, false otherwise.
+     */
+    public boolean askQuery(String queryString){
+    	    	
+    	boolean hasResults = false;
+    	Query query = QueryFactory.create( this.queryPrefix + queryString );
+    	this.executedQuery = QueryExecutionFactory.create(query, this.model) ;
+    	hasResults = this.executedQuery.execAsk();
+    	this.executedQuery.close();   	
+        return hasResults;
+    }  
     
     /**
      * <p>
@@ -371,7 +386,7 @@ public class MethodsSPARQL {
             }                        
         }
         this.executedQuery.close();
-    }
+    }    
     
     /**
      * <p>
@@ -383,7 +398,7 @@ public class MethodsSPARQL {
     public String searchSynonyms(String wordSynonyms){
 
     	String queryString = null;
-
+    	String queryASK = null;
     	this.openOntology();
     	Property annotation = this.model.getAnnotationProperty(this.getURIModel() + "sinonimo");
         
@@ -394,20 +409,23 @@ public class MethodsSPARQL {
         		
         		OntClass classeTmp = this.model.getOntClass(listClasses.next().toString());
         		
-                if(classeTmp != null && classeTmp.getPropertyValue(annotation) != null){
+                if( (classeTmp != null) && ( classeTmp.getPropertyValue(annotation) != null) ){
                 	//System.out.println(classeTmp.getURI());
                 	                	                	
-                	Individual indi = this.model.getIndividual(classeTmp.getPropertyValue(annotation).toString());
-                		               
-                	                	
-                	queryString = "SELECT ?ind ?sinonimo WHERE {" +
-		                            "?ind rdf:type <"+indi.getOntClass().toString()+">. " +
-		                            "?ind rdfs:comment ?sinonimo. " +
-		                            "FILTER (regex(?sinonimo, '"+wordSynonyms+"' ,'i'))}\n";
-
+                	Individual indi = this.model.getIndividual(classeTmp.getPropertyValue(annotation).toString());                		                               	                                	
+                	
+                	queryASK = "ASK {" +
+				                    "?ind rdf:type <"+indi.getOntClass().toString()+">. " +
+				                    "?ind rdfs:comment ?sinonimo. " +
+				                    "FILTER (regex(?sinonimo, '"+wordSynonyms+"' ,'i'))}\n";
+                	
                 	 // if it exists query results, so there concept synonymous
-                	if(this.hasResults( queryString )){
-                		//System.out.println("Exists synonyms for research "+indi.getOntClass().getLocalName());
+                	if(this.askQuery( queryASK )){
+                		//System.out.println("Exists synonyms for "+indi.getOntClass().getLocalName());
+                		queryString = "SELECT ?ind ?sinonimo {" +
+	                            "?ind rdf:type <"+indi.getOntClass().toString()+">. " +
+	                            "?ind rdfs:comment ?sinonimo. " +
+	                            "FILTER (regex(?sinonimo, '"+wordSynonyms+"' ,'i'))}\n";
                 		return queryString;
                 	}
                 }
