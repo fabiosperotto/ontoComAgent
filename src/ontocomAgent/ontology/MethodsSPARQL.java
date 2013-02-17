@@ -58,9 +58,9 @@ public class MethodsSPARQL {
     private QueryExecution executedQuery; //will use to remove existing query in memory
     
     /**
-     * Construtor da Classe.
+     * Class Constructor.
      * @param fileOntology String with the path of .owl file
-     * "http://www.repositorioontologia.com/ontologia.owl#".
+     * "http://www.ontologyrepository.com/ontology.owl#".
      */
     public MethodsSPARQL(String fileOntology){
         
@@ -341,7 +341,7 @@ public class MethodsSPARQL {
      * 
      *     SELECT ?Elemento ?Nome 
      *			WHERE { 
-     *					?Elemento &lt;http://www.owl-ontologies.com/Onto_Anime.owl#Nome&gt; 
+     *					?Elemento &lt;http://www.owl-ontologies.com/ontology.owl#Name&gt; 
      *					?Nome.FILTER regex(?Nome,&#039;Beatriz&#039;) .
      *			}
      * </code><br/><br/>
@@ -564,7 +564,7 @@ public class MethodsSPARQL {
      * </p>
      * @param queryString Query to be held.
      * @param listColumns An ArrayList with the name of the two columns surveyed in queryString (beginning with '?')
-     * @return Array with 2 results, odd positions with the column name, position even with value name that came the query.
+     * @return Array with 2 results, odd positions with the column name, even positions with value name that came the query.
      */
     public String[] getArrayIndValue(String queryString, ArrayList<String> listColumns){
     	
@@ -700,7 +700,7 @@ public class MethodsSPARQL {
     /**
      * Search and returns an object property, considering the name of the property has the first capitalized letter or not.
      * @param propertyName name of the property to search
-     * @param upperCase indicate 0 if the propertyName is certain equal in ontology. Indicate 1 if needs upper the firts letter of propertyName.
+     * @param upperCase indicate 0 if the propertyName is certain equal in ontology. Indicate 1 if needs upper the first letter of propertyName.
      * @return URI of a true object property or null if the propertyName not exists in ontology.
      */
     public String getObjectPropertyURI(String propertyName, int upperCase){

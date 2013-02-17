@@ -196,7 +196,7 @@ public class Mediator {
 	 * <p>
 	 * A simple method to add special characters, from one reference word, in a new word.
 	 * </p>
-	 * @param a simple word without special characters
+	 * @param simpleWord a simple word without special characters
 	 * @param wordSpecialChars a word with special characters
 	 * @return a new word with simpleWord plus special characters
 	 */
@@ -227,7 +227,7 @@ public class Mediator {
 	 * Method for testing a string to search for special characters.
 	 * </p>
 	 * @param testWord word to be tested
-	 * @return true true if there is at least one special character, false otherwise
+	 * @return true if there is at least one special character, false otherwise
 	 */
 	public boolean hasSpecialChars(String testWord){
 		
@@ -251,6 +251,7 @@ public class Mediator {
 	/**
 	 * <p>
 	 * This method provide a way to replace words by ontology relations in a agent message.
+	 * The message result is set in this.message if the agent message is in String, otherwise will set in KMQL txt file.
 	 * </p>
 	 * <ol>
 	 * 	<li>is recognized object properties.</li>
@@ -258,18 +259,18 @@ public class Mediator {
 	 * 	<li>each domain and range is matched with others remaining words in agent message.</li>
 	 * 	<li>each relation is inserted into agent message replacing their respective words.</li>
 	 * </ol>
-	 * @return the corrected agent message 
 	 */
-	public String getKnowledgeRelation(){
+	public void getKnowledgeRelation(){
 		
-		this.message = this.getKnowledgeConcepts();		
+		//string to manipulate results from ontology:
+		String ontoMessage = this.getKnowledgeConcepts();
 		
 		MethodsSPARQL met = new MethodsSPARQL(this.ontologyPath);
-		Communication commAgent = new Communication(0);
-		String[] queryConcepts = commAgent.getContent(this.message);
+		Communication commAgent = new Communication(0); //set 0 because the message was manipulated in ontoMessage
+		String[] queryConcepts = commAgent.getContent(ontoMessage);
 		String wordMsgFiltered;
-		ArrayList<String> listNonRelations = new ArrayList<String>();
-		ArrayList<String> listRelations = new ArrayList<String>();
+		ArrayList<String> listNonRelations = new ArrayList<String>(); //list of candidates to concept
+		ArrayList<String> listRelations = new ArrayList<String>(); //list with object property names
 		
 		String property = null;
 		
@@ -318,10 +319,10 @@ public class Mediator {
 			    				
 			    				if(this.hasSpecialChars(listNonRelations.get(j))){ //if has special character
 			    					
-			    					this.message = this.message.replaceAll("\\"+listNonRelations.get(j), "");
+			    					ontoMessage = ontoMessage.replaceAll("\\"+listNonRelations.get(j), "");
 			    					
 			    				}else{
-			    					this.message = this.message.replaceAll(listNonRelations.get(j), "");
+			    					ontoMessage = ontoMessage.replaceAll(listNonRelations.get(j), "");
 			    				}			    				    							    				
 			    				
 			    				if(manipulating.indexOf(listNonRelations.get(j)) == -1){
@@ -343,13 +344,13 @@ public class Mediator {
 		    		for(int j = 0; j< listNonRelations.size(); j++){
 		    			
 		    			if(this.filterSymbols(listNonRelations.get(j)).contains(relationList.get(i))){ //if one is equal another one
-		    				//System.out.println("ANTES: "+this.message);
+
 		    				if(this.hasSpecialChars(listNonRelations.get(j))){ //if has special character
 		    					
-		    					this.message = this.message.replaceAll("\\"+listNonRelations.get(j), "");
+		    					ontoMessage = ontoMessage.replaceAll("\\"+listNonRelations.get(j), "");
 		    					
 		    				}else{
-		    					this.message = this.message.replaceAll(listNonRelations.get(j), "");
+		    					ontoMessage = ontoMessage.replaceAll(listNonRelations.get(j), "");
 		    				}
 		    				
 		    				if(manipulating.indexOf(listNonRelations.get(j)) == -1){
@@ -363,16 +364,27 @@ public class Mediator {
 		    	
 		    	if(this.hasSpecialChars(listRelations.get(w))){ //have special characters
 
-		    		this.message = this.message.replaceAll("\\"+listRelations.get(w), manipulating);
+		    		ontoMessage = ontoMessage.replaceAll("\\"+listRelations.get(w), manipulating);
 		    	}else{
-		    		this.message = this.message.replaceAll(listRelations.get(w), manipulating);
+		    		ontoMessage = ontoMessage.replaceAll(listRelations.get(w), manipulating);
 		    	}
 		    	
 			}
 		}
-		this.message = this.message.replaceAll("  ", " ");
-		this.message = this.message.replaceAll("  ", " ");
-		return this.message;
+		//trying to remove double backspaces:
+		ontoMessage = ontoMessage.replaceAll("  ", " ");
+		ontoMessage = ontoMessage.replaceAll("  ", " ");
+		
+		if(this.langTypeContent == 0){
+			this.message = ontoMessage;
+		}
+		
+		if(this.langTypeContent == 1){
+			commAgent.setMessageType(1);
+			commAgent.setToFileKQML(this.message, ontoMessage);
+		}
+		
+		
 	}
 	
 	/**
