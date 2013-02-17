@@ -24,17 +24,31 @@ package ontocomAgent.communication;
 
 public class Communication {
 	
-	public int messageType;
-	
+	private int messageType;
 
+	/**
+	 * Class constructor.
+	 */
 	public Communication() {
 	
 	}
 	
+	/**
+	 * Class constructor.
+	 * @param communicationType to modify the type of communication
+	 */
 	public Communication(int communicationType){
 
 		//this.message = message;
 		this.messageType = communicationType;
+	}
+	
+	public int getMessageType() {
+		return messageType;
+	}
+
+	public void setMessageType(int messageType) {
+		this.messageType = messageType;
 	}
 	
 	/**
@@ -90,7 +104,7 @@ public class Communication {
 	
 	/**
 	 * Returns a string in which language is represented the content of the message agent.
-	 * @param agentMessage
+	 * @param agentMessage the agent message
 	 */
 	public String getLanguageMsg(String agentMessage){
 		
@@ -106,5 +120,18 @@ public class Communication {
 		}
 				
 	}
-
+	
+	/**
+	 * Sets the new message to the KQML file, manipulated from Mediator.
+	 * @param archive the path to the file
+	 * @param agentMessage the new agent message
+	 */
+	public void setToFileKQML(String archive, String agentMessage){
+		
+		if(this.messageType == 1){
+			
+			AgentMsgConversion msg = new AgentMsgConversion( archive );
+			msg.setMessageFileKQML(agentMessage);
+		}
+	}
 }

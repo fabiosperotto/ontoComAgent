@@ -16,8 +16,12 @@
 package ontocomAgent.communication;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.FileReader;
+import java.io.PrintWriter;
+import java.util.Scanner;
 
 /**
  * <p>
@@ -30,10 +34,10 @@ public class AgentMsgConversion {
 
 	/**
 	 * <p>Class constructor (need inform the path to file)</p>
-	 * @param archiveAddres
+	 * @param archiveAddres the path to the file
 	 */
-	public AgentMsgConversion(String archiveAddres) {
-		this.archive = archiveAddres;
+	public AgentMsgConversion(String archiveAddress) {
+		this.archive = archiveAddress;
 	}
 
 	/**
@@ -46,7 +50,7 @@ public class AgentMsgConversion {
 
 	/**
 	 * <p>Set the path of the file.</p>
-	 * @param archive
+	 * @param archive path to file
 	 */
 	public void setArchive(String archive) {
 		this.archive = archive;
@@ -54,7 +58,7 @@ public class AgentMsgConversion {
 	
 	/**
 	 * <p>A counter to determine how much lines the txt file have.</p>
-	 * @return maxRows
+	 * @return total file lines
 	 */
 	public int countFileRows(){
 		int maxRows = 0;	
@@ -176,5 +180,73 @@ public class AgentMsgConversion {
 		}
 		
 		return mounted;
-	}	
+	}
+	
+	/**
+	 * This method returns the message from agent (in KQML format) in a  array (String[]), without treatments.
+	 * Each index of array is an line of txt file.
+	 * @return an String[] with agent message.
+	 */
+	public String[] getMessageLinesArray(){
+		
+		int textLines = this.countFileRows();
+		String fileContent[] = new String[textLines];
+		int ind = 0;
+		
+		try{
+			File file = new File(this.archive); 
+			Scanner scan = new Scanner(file);
+			
+			
+			String temp = null;
+			while(scan.hasNextLine()){
+				temp = scan.nextLine();
+				fileContent[ind] = temp;
+				ind++;				
+			}
+			scan.close();
+			
+		}catch(IOException error){
+			System.out.println("Error getMessageSimpleArray: "+error.getMessage());
+		}
+		
+		return fileContent;
+		
+	}
+	
+	/**
+	 * Picks up the new message content and fixes the file of the message from the agent.
+	 * This method saves the entire contents of the file and overwrite the same file with new content.
+	 * @param newContent new message with ontology modifications.
+	 */
+	public void setMessageFileKQML(String newContent){
+		
+		String content[] = this.getMessageLinesArray();
+		int index = 0;
+		
+		for(index = 0; index < content.length; index++){
+			
+			if(content[index].contains(":content")){
+				content[1] = ":content ("+newContent+")";
+			}
+			
+		}
+		
+		try{
+			File file = new File(this.archive); 
+			FileWriter fileWriter = new FileWriter(file, false);
+			PrintWriter printWriter = new PrintWriter(fileWriter);			
+			for(index = 0; index < content.length; index++){
+				printWriter.println(content[index]);
+			}
+			
+			printWriter.flush();
+			printWriter.close();
+			
+		}catch(IOException error){
+			System.out.println("Error setMessage: "+error.getMessage());
+			
+		}
+		
+	}
 }
