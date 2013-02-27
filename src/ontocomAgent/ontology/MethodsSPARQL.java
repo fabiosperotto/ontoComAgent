@@ -195,7 +195,7 @@ public class MethodsSPARQL {
      * @return Returns an ArrayList containing a list with the query results or a empty list if not found.
      */
     @SuppressWarnings("rawtypes")
-	public ArrayList listResults(String queryString){
+	public ArrayList listResultsAsList(String queryString){
     	
     	Query query = QueryFactory.create( this.queryPrefix + queryString );
     	this.openOntology();
@@ -240,7 +240,7 @@ public class MethodsSPARQL {
 	public int rowCountResults(String queryString){
     	    	
     	ArrayList listValues = new ArrayList();
-    	listValues = listResults(queryString);
+    	listValues = listResultsAsList(queryString);
     	return listValues.size();
     	
     }

@@ -129,7 +129,7 @@ public class Mediator {
 					"FILTER (regex(?o, '"+wordSearch+"', 'i'))}\n";
 
 			ArrayList queryResultOntology = new ArrayList();
-			queryResultOntology = sparql.listResults(query);
+			queryResultOntology = sparql.listResultsAsList(query);
 			//System.out.println("Resultado: "+resultados.get(0).toString());
 			
 			if(queryResultOntology.size() > 0){ //if it exists results the ontology
@@ -422,4 +422,5 @@ public class Mediator {
 		}		
 		return synonym;
 	}
+
 }
