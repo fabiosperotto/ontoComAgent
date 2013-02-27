@@ -21,6 +21,7 @@ import com.hp.hpl.jena.ontology.OntModelSpec;
 import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.query.*;
 import com.hp.hpl.jena.rdf.model.*;
+import com.hp.hpl.jena.sparql.core.Prologue;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.ontology.Individual;
 
@@ -174,7 +175,10 @@ public class MethodsSPARQL {
      * @return true if exist results, false otherwise.
      */
     public boolean askQuery(String queryString){
-    	    	
+    	
+    	if(this.model == null){
+    		this.openOntology();
+    	}
     	boolean hasResults = false;
     	Query query = QueryFactory.create( this.queryPrefix + queryString );
     	this.executedQuery = QueryExecutionFactory.create(query, this.model) ;
@@ -188,7 +192,7 @@ public class MethodsSPARQL {
      * Returns a list of results in an ArrayList.
      * </p>
      * @param queryString A string with any SPARQL query.
-     * @return Returns an ArrayList containing a list with the query results.
+     * @return Returns an ArrayList containing a list with the query results or a empty list if not found.
      */
     @SuppressWarnings("rawtypes")
 	public ArrayList listResults(String queryString){
