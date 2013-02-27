@@ -209,6 +209,28 @@ public class MethodsSPARQL {
     
     /**
      * <p>
+     * Returns a list of results in an text mode.
+     * This mode is a simple table with columns and the values from query.
+     * </p>
+     * @param queryString A string with any SPARQL query.
+     * @return Returns an String containing a text with the query results or null if nothing found.
+     */
+	public String listResultsAsText(String queryString){
+    	
+    	Query query = QueryFactory.create( this.queryPrefix + queryString );
+    	this.openOntology();
+        this.executedQuery = QueryExecutionFactory.create(query, this.model);
+        ResultSet results = this.executedQuery.execSelect();
+        String textResult = null;
+    	Prologue prologue = new Prologue();
+    	prologue.setBaseURI(getURIModel());
+    	textResult = ResultSetFormatter.asText(results, prologue);
+    	this.executedQuery.close();
+    	return textResult;
+    }
+	
+    /**
+     * <p>
      * Return the number of rows of the query.
      * </p>
      * @param queryString  A string with any SPARQL query.
