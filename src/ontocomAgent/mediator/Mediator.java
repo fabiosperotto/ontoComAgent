@@ -32,7 +32,8 @@ public class Mediator {
 	private String ontologyPath;
 	private String message;
 	public int langTypeContent;
-
+	private String rangeFuzzyDegree;
+	
 	public Mediator() {
 
 	}
@@ -66,6 +67,31 @@ public class Mediator {
 		this.message = message;
 	}
 	
+	
+	/**
+	 * Returns the range of grades used to restrict the SPARQL query terms synonymous
+	 * @return String with range used
+	 */
+	public String getRangeFuzzyDegree() {
+		return rangeFuzzyDegree;
+	}
+
+	/**
+	 * <p>
+	 * This method is not necessary for use all the library. This exists for provide to SPARQL queries to query out information with a determined degree.
+	 * </p>
+	 * <p>
+	 * The information need stay in rdfs:comment of the ontology class/concept in a format: 0.X/information sentence.
+	 * Where X is a value between 0 and 9 (this is a range of fuzzy values, between 0.0 and 0.9.
+	 * </p>
+	 * @param min the minimum value for the grade fuzzy, related to X in the format described above.
+	 * @param max the maximum value for the fuzzy degree, related to X in the format described above.
+	 */
+	public void setRangeFuzzyDegree(int min, int max) {
+		
+		this.rangeFuzzyDegree = "0.["+min+"-"+max+"]/";
+	}
+
 	/**
 	 * <p>
 	 * Performs the search for knowledge using the agent message.
@@ -115,25 +141,31 @@ public class Mediator {
 		ArrayList<String> finalResultConcepts = new ArrayList<String>();
 		String tagRDF;
 		String wordSearch;
-		
+		String query;
 		
 		int i,j;
 		
 		for(i = 0; i<queryConcepts.length; i++){
 			
 			wordSearch = this.filterSymbols(queryConcepts[i]);
-			//System.out.println("palavra: "+wordSearch);
+			//System.out.println("wordSearch: "+wordSearch);
 			
-			String query = "SELECT * WHERE{ " +
-					"?s ?p ?o. " +
-					"FILTER (regex(?o, '"+wordSearch+"', 'i'))}\n";
+			if(this.rangeFuzzyDegree == null){
+				query = "SELECT * WHERE{ " +
+						"?s ?p ?o. " +
+						"FILTER (regex(?o, '"+wordSearch+"', 'i'))}\n";
+			}else{
+				query = "SELECT * WHERE{ " +
+						"?s ?p ?o. " +
+						"FILTER (regex(?o, '"+this.rangeFuzzyDegree+"("+wordSearch+")"+"', 'i'))}\n";
+				
+			}
 
 			ArrayList queryResultOntology = new ArrayList();
 			queryResultOntology = sparql.listResultsAsList(query);
-			//System.out.println("Resultado: "+resultados.get(0).toString());
 			
 			if(queryResultOntology.size() > 0){ //if it exists results the ontology
-				
+				//System.out.println("Results: "+queryResultOntology.get(0).toString());
 				result = queryResultOntology.get(0).toString().replaceAll("[(-)]", "");		
 				result = result.replaceAll("\\<","");
 				result = result.replaceAll("\\>","");									
@@ -154,7 +186,7 @@ public class Mediator {
 				// if is a comment class tag
 				if(tagRDF.compareTo("rdfs:comment") == 0){
 					
-					String concept = sparql.getClassSynonym(wordSearch);
+					String concept = sparql.getClassSynonym(wordSearch,this.rangeFuzzyDegree);
 					//System.out.println("Concept: "+concept);
 					
 					if(concept != null){
@@ -422,5 +454,18 @@ public class Mediator {
 		}		
 		return synonym;
 	}
-
+	
+	/**
+	 * <p>
+	 * Gets the SPARQL query results in a simple String table.
+	 * </p>
+	 * @param queryString with a SPARQL query (without any prefix, because the constructor {@link MethodsSPARQL} mounts them).
+	 * @return the result from query in a String table or null if nothing returned.
+	 */
+	public String getOntologyResults(String queryString){
+		String results = null;
+		MethodsSPARQL ontology = new MethodsSPARQL(this.ontologyPath);
+		results = ontology.listResultsAsText(queryString);
+		return results;
+	}
 }

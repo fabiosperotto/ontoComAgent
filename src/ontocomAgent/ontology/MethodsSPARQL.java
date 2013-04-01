@@ -25,8 +25,13 @@ import com.hp.hpl.jena.sparql.core.Prologue;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.ontology.Individual;
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -67,7 +72,7 @@ public class MethodsSPARQL {
         
         this.archive = fileOntology;
         this.queryPrefix = "PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#> "+
-        					   "PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n";
+        					"PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>\n";
     }
     
     public String getQueryPrefix() {
@@ -86,12 +91,12 @@ public class MethodsSPARQL {
      */
     protected void openOntology(){
     	
-        this.model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);
+        this.model = ModelFactory.createOntologyModel(OntModelSpec.OWL_MEM);        
         InputStream in = FileManager.get().open(this.archive);
         if (in == null) {
-             throw new IllegalArgumentException( "File: " + this.archive + " not found");
+            throw new IllegalArgumentException( "File: " + this.archive + " not found");
         }
-        this.model.read(new InputStreamReader(in), "");
+        this.model.read(new InputStreamReader(in), "");        
     }
     
     /**
@@ -219,7 +224,7 @@ public class MethodsSPARQL {
     	
     	Query query = QueryFactory.create( this.queryPrefix + queryString );
     	this.openOntology();
-        this.executedQuery = QueryExecutionFactory.create(query, this.model);
+    	this.executedQuery = QueryExecutionFactory.create(query, this.model);
         ResultSet results = this.executedQuery.execSelect();
         String textResult = null;
     	Prologue prologue = new Prologue();
@@ -299,9 +304,9 @@ public class MethodsSPARQL {
      * @param queryString String with SPARQL query to be performed.
      */
     public void getPropertyConsult(String queryString){
-        // outra forma de resultado da query com iterator
-        // tambem realiza a manipulacao em String dos resultados
-        // para retornar em URI as propriedades, relacionamentos, classes
+        // another way the result of the query with iterator.
+    	// also performs in String manipulation of the results.
+    	// to return to URI the properties, relationships, classes.
         
         ResultSet resultsQuery = executeQuery( queryString );
         
@@ -317,7 +322,7 @@ public class MethodsSPARQL {
             if(newString.indexOf("http") != -1){ // if string is URI
                 
                    
-                // verificando o tipo das propriedades
+                //checking the type of properties
                 Property propObjeto = this.model.getObjectProperty(newString);                
                 Property propDados = this.model.getDatatypeProperty(newString);
                 Property propAnotacao = this.model.getAnnotationProperty(newString);
@@ -361,23 +366,24 @@ public class MethodsSPARQL {
     
     /**
      * <p>
+     * <b>EXPERIMENTAL</b>.
      * This is a method example to obtain a columns treatment in an SPARL query
      * Returns the result of the following SPARQL query:
      * <br/><br/><code>
      * 
-     *     SELECT ?Elemento ?Nome 
+     *     SELECT ?Element ?Name 
      *			WHERE { 
-     *					?Elemento &lt;http://www.owl-ontologies.com/ontology.owl#Name&gt; 
-     *					?Nome.FILTER regex(?Nome,&#039;Beatriz&#039;) .
+     *					?Element &lt;http://www.owl-ontologies.com/ontology.owl#Name&gt; 
+     *					?Name.FILTER regex(?Name,&#039;Beatriz&#039;) .
      *			}
      * </code><br/><br/>
-     * Manipulating each column and value (?Elemento, ?Nome), verifying that 
+     * Manipulating each column and value (?Element, ?Name), verifying that 
      * data are literals or resources on Ontology. Each column is treated 
      * as a variable at node RDF.
      * </p>
      * @param queryString A string containing the query mentioned above.
-     * @param var1 In this example the will handle column ?Nome.
-     * @param var2 In this example the will handle column ?Elemento.
+     * @param var1 In this example the will handle column ?Name.
+     * @param var2 In this example the will handle column ?Element.
      */
     public void getLitRes(String queryString, String var1, String var2){
         
@@ -419,9 +425,9 @@ public class MethodsSPARQL {
      * Verifies the existence of a synonym in the ontology.
      * </p>
      * @param wordSynonyms to be searched.
-     * @return SPARQL query with the class that owns the synonym.
+     * @return SPARQL query with the class that owns the synonym or null otherwise.
      */
-    public String searchSynonyms(String wordSynonyms){
+    public String searchSynonyms(String wordSynonyms, String rangeFuzzy){
 
     	String queryString = null;
     	String queryASK = null;
@@ -440,18 +446,42 @@ public class MethodsSPARQL {
                 	                	                	
                 	Individual indi = this.model.getIndividual(classeTmp.getPropertyValue(annotation).toString());                		                               	                                	
                 	
-                	queryASK = "ASK {" +
-				                    "?ind rdf:type <"+indi.getOntClass().toString()+">. " +
-				                    "?ind rdfs:comment ?sinonimo. " +
-				                    "FILTER (regex(?sinonimo, '"+wordSynonyms+"' ,'i'))}\n";
-                	
+                	//if the mediator object not have the fuzzy range to search in SPARQL:
+                	if(rangeFuzzy == null){
+                		
+                		queryASK = "ASK {" +
+			                    "?ind rdf:type <"+indi.getOntClass().toString()+">. " +
+			                    "?ind rdfs:comment ?sinonimo. " +
+			                    "FILTER (regex(?sinonimo, '"+wordSynonyms+"' ,'i'))}\n";
+                		
+                	}else{
+                		
+                		queryASK = "ASK {" +
+			                    "?ind rdf:type <"+indi.getOntClass().toString()+">. " +
+			                    "?ind rdfs:comment ?sinonimo. " +
+			                    "FILTER (regex(?sinonimo, '"+rangeFuzzy+"("+wordSynonyms+")"+"' ,'i'))}\n";
+                		
+                	}
                 	 // if it exists query results, so there concept synonymous
                 	if(this.askQuery( queryASK )){
                 		//System.out.println("Exists synonyms for "+indi.getOntClass().getLocalName());
-                		queryString = "SELECT ?ind ?sinonimo {" +
-	                            "?ind rdf:type <"+indi.getOntClass().toString()+">. " +
-	                            "?ind rdfs:comment ?sinonimo. " +
-	                            "FILTER (regex(?sinonimo, '"+wordSynonyms+"' ,'i'))}\n";
+                		//if the mediator object not have the fuzzy range to search in SPARQL:
+                		if(rangeFuzzy == null){
+                			
+                			queryString = "SELECT ?ind ?sinonimo {" +
+    	                            "?ind rdf:type <"+indi.getOntClass().toString()+">. " +
+    	                            "?ind rdfs:comment ?sinonimo. " +
+    	                            "FILTER (regex(?sinonimo, '"+wordSynonyms+"' ,'i'))}\n";
+                			
+                		}else{
+                			
+                			queryString = "SELECT ?ind ?sinonimo {" +
+    	                            "?ind rdf:type <"+indi.getOntClass().toString()+">. " +
+    	                            "?ind rdfs:comment ?sinonimo. " +
+    	                            "FILTER (regex(?sinonimo, '"+rangeFuzzy+"("+wordSynonyms+")"+"' ,'i'))}\n";
+                		}
+                		
+                		
                 		return queryString;
                 	}
                 }
@@ -467,18 +497,18 @@ public class MethodsSPARQL {
      * @param wordSynonyms to be search.
      * @return String with the concept name or null if not found.
      */
-    public String getClassSynonym(String wordSynonyms){
+    public String getClassSynonym(String wordSynonyms, String rangeFuzzy){
     	
     	String concept = null;
     	//System.out.println("Searching... "+wordSynonyms);
-    	String queryString = this.searchSynonyms(wordSynonyms);
+    	String queryString = this.searchSynonyms(wordSynonyms, rangeFuzzy);
     	//System.out.println("Result query: "+queryString);
     	if( queryString != null){
     		
     		ResultSet results = this.executeQuery( queryString );    		
     		QuerySolution soln = results.nextSolution();
 
-    		//System.out.println("Individuo: "+soln.getResource("?ind"));
+    		//System.out.println("Individual: "+soln.getResource("?ind"));
     		if(soln.getResource("?ind") != null){
     			//System.out.println("Total: "+resultados.getRowNumber());
         		//QuerySolution soln = resultados.nextSolution();
@@ -486,7 +516,7 @@ public class MethodsSPARQL {
         		//RDF nodo = soln.varNames()get(listaColunas.get(i));        		
         		Individual indi = this.model.getIndividual(soln.getResource("?ind").toString());    		
         		OntClass ontcls = this.model.getOntClass(indi.getOntClass(true).toString());
-        		//System.out.println("Classe: "+ontcls.getLocalName());
+        		//System.out.println("Class: "+ontcls.getLocalName());
         		concept = ontcls.getLocalName();
     		}    		    		    		    
     	}    	
@@ -503,7 +533,7 @@ public class MethodsSPARQL {
     public String[][] getSynonymsFuzzy(String wordSynonyms){
     	
     	String[][] fuzzySet = null;	               
-         String queryString = this.searchSynonyms(wordSynonyms);
+         String queryString = this.searchSynonyms(wordSynonyms, null);
          if( queryString != null){
                 		                		              
               ArrayList<String> listColumns = new ArrayList<String>();
@@ -531,7 +561,7 @@ public class MethodsSPARQL {
     
     /**
      * <p>
-     * Function that returns a set Fuzzy based on synonyms found in the function {@code buscaSinonimos()}.
+     * Function that returns a set Fuzzy based on synonyms found in the function {@code getSynonymsFuzzy()}.
      * </p>
      * @param listRowFuzzyValues Vector String [] that has the fuzzy weights, see the function {@code getArrayIndValor()}.
      * @return Array of the String[][] where the first index is the weight and the second is the synonym.
