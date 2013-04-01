@@ -510,7 +510,7 @@ public class MethodsSPARQL {
 
     		//System.out.println("Individual: "+soln.getResource("?ind"));
     		if(soln.getResource("?ind") != null){
-    			//System.out.println("Total: "+resultados.getRowNumber());
+    			//System.out.println("Total: "+results.getRowNumber());
         		//QuerySolution soln = resultados.nextSolution();
         		
         		//RDF nodo = soln.varNames()get(listaColunas.get(i));        		

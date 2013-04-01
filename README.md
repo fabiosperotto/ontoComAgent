@@ -1,18 +1,22 @@
-#ontoComAgent - Biblioteca de interoperabilidade na comunicação entre Agentes e Ontologia
+#ontoComAgent - Biblioteca de mediação na comunicação entre Agentes e Ontologia
 
 
 [Página inicial do projeto](http://fabiosperotto.github.com/ontoComAgent/)
 
-Este projeto visa desenvolver um modelo de interoperabilidade na comunicação de agentes, utilizando Ontologia e Sinônimos. É uma biblioteca de programação para oferecer aos desenvolvedores de Sistemas Multiagentes uma opção na utilização de ontologias para apoiar a comunicação dos agentes de forma simples, sem a necessidade do conhecimento profundo sobre Ontologias e tecnologias de manipulação tais como SPARQL e [Jena](http://jena.apache.org/). As Ontologias a serem utilizadas devem ser baseadas em frames de acordo com o [Protocolo da Open Knowledge Base Connectivity](http://www.ai.sri.com/~okbc/). Mais informações siga para a [Wiki](https://github.com/fabiosperotto/ontoComAgent/wiki).
+Este projeto visa desenvolver um modelo de mediação na comunicação de agentes, utilizando Ontologia e Sinônimos. É uma biblioteca de programação para oferecer aos desenvolvedores de Sistemas Multiagentes uma opção na utilização de ontologias para apoiar a comunicação dos agentes de forma simples, sem a necessidade do conhecimento profundo sobre Ontologias e tecnologias de manipulação tais como SPARQL e [Jena](http://jena.apache.org/). As Ontologias a serem utilizadas devem ser baseadas em frames de acordo com o [Protocolo da Open Knowledge Base Connectivity](http://www.ai.sri.com/~okbc/). Mais informações siga para a [Wiki](https://github.com/fabiosperotto/ontoComAgent/wiki).
+
+O foco é a área de SMA entretanto esta biblioteca pode ser utilizada também como apoio para consultas a ontologia, de uma forma geral.
 
 
-This project aims to develop a model for interoperability in communication agents, using Ontology and Synonyms. It is a programming library for offer Multiagent Systems developers a choice in the use of ontologies to support the communication of agents in a simple way without the need of deep knowledge on Ontologies and handling technologies such as SPARQL and [Jena](http://jena.apache.org/). The ontologies to be used should be based on frames according to the [Protocol of the Open Knowledge Base Connectivity](http://www.ai.sri.com/~okbc/). More information see the [Wiki](https://github.com/fabiosperotto/ontoComAgent/wiki).
+This project aims to develop a model of mediation in communication agents, using Ontology and Synonyms. It is a programming library for offer Multiagent Systems developers a choice in the use of ontologies to support the communication of agents in a simple way without the need of deep knowledge on Ontologies and handling technologies such as SPARQL and [Jena](http://jena.apache.org/). The ontologies to be used should be based on frames according to the [Protocol of the Open Knowledge Base Connectivity](http://www.ai.sri.com/~okbc/). More information see the [Wiki](https://github.com/fabiosperotto/ontoComAgent/wiki).
+
+The focus is the area of MAS however this library can also be used as support for queries to ontology in general.
 
 
 
 ##Modelo
 
-O modelo pode ser conferido na figura abaixo (clique para ampliar). É necessário usar uma ontologia. Mais informações na [Wiki](https://github.com/fabiosperotto/ontoComAgent/wiki).
+O modelo pode ser conferido na figura abaixo (clique para ampliar). É necessário conectar-se a uma ontologia. Mais informações na [Wiki](https://github.com/fabiosperotto/ontoComAgent/wiki).
 
 <div align="center"><a href="http://img210.imageshack.us/img210/3405/diagramaaplicacao.png" target=_blank><img src="http://www.makeathumbnail.com/thumbnails/image143018.png"></a></div>
 
